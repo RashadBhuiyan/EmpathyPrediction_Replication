@@ -1,0 +1,6 @@
+{
+    "DATA_DIR": "datasets",
+    "TRAIN_FILE": "anon_efp_train.csv",
+    "TEST_FILE": "anon_efp_test.csv",
+    "VAL_FILE": "anon_efp_val.csv"
+}
