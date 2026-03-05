@@ -1,0 +1,16 @@
+1. Normalize similarity_empathy_human_AGG from the PAIRS*.csv files to range from 1-100
+2. Implement models using EmpathicSimilarityModel.py from the empathic-stories GitHub as a reference (see Appendix E for details)
+--> PPEP model
+--> Predictions based on Similarity
+--> Prediction Given StoryB Only
+--> Prediction with Story Parts
+--> Prediction using Demographics
+--> Prediction using LLMs (see Appendix D for prompt)
+3. Evaluate models on specified metrics (goal is to be within +- 5% of provided results)
+--> Spearman correlation
+--> Pearson correlation
+--> accuracy
+--> F1
+--> precision
+--> recall
+--> mean-squared error
