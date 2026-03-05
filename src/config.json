@@ -1,6 +1,9 @@
 {
     "DATA_DIR": "datasets",
-    "TRAIN_FILE": "anon_efp_train.csv",
-    "TEST_FILE": "anon_efp_test.csv",
-    "VAL_FILE": "anon_efp_val.csv"
+    "EFP_TRAIN": "anon_efp_train.csv",
+    "EFP_TEST": "anon_efp_test.csv",
+    "EFP_VAL": "anon_efp_val.csv",
+    "PAIRS_TRAIN": "PAIRS_train.csv",
+    "PAIRS_TEST": "PAIRS_test.csv",
+    "PAIRS_DEV": "PAIRS_dev.csv"
 }
