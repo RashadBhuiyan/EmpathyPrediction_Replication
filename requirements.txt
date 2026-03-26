@@ -1,0 +1,7 @@
+omegaconf==2.3.0
+pandas==3.0.1
+pytorch_lightning==2.6.0
+sentence_transformers==5.1.2
+torch==2.8.0
+torchmetrics==1.8.2
+transformers==4.57.6
