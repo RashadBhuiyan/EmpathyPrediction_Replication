@@ -4,7 +4,7 @@
 
 import torch
 
-class EmpathicStoriesDataset(torch.utils.data.Dataset):
+class EFPDataset(torch.utils.data.Dataset):
     def __init__(self, data, limit=-1):
         self.data = data
         self.limit = limit
@@ -17,7 +17,7 @@ class EmpathicStoriesDataset(torch.utils.data.Dataset):
         why_B = i["why_B"]
         story_A = i["story_A"]
         story_B = i["story_B"]
-        empathy_score = (i["empathy"] / 100.0)
+        empathy_score = i["empathy"] / 100.0
 
         return [place_A, why_A, story_A, place_B, why_B, story_B, empathy_score]
 

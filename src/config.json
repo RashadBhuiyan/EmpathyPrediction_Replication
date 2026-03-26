@@ -1,9 +1,11 @@
 {
     "DATA_DIR": "datasets",
+    "CODE_DIR": "src",
     "EFP_TRAIN": "anon_efp_train.csv",
     "EFP_TEST": "anon_efp_test.csv",
     "EFP_VAL": "anon_efp_val.csv",
     "PAIRS_TRAIN": "PAIRS_train.csv",
     "PAIRS_TEST": "PAIRS_test.csv",
-    "PAIRS_DEV": "PAIRS_dev.csv"
+    "PAIRS_DEV": "PAIRS_dev.csv",
+    "EFP_HEADERS": ["place_A", "why_A", "story_A", "place_B", "why_B", "story_B", "empathy"]
 }
