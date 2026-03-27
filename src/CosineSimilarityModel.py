@@ -8,7 +8,7 @@
 # MSE loss between predicted empathy and human empathy ratings (both ranging 0 to 1) was used
 # validation loss was used to select the best-performing model
 
-
+import gc
 import os
 import pandas as pd
 import torch
@@ -16,6 +16,7 @@ import pytorch_lightning as pl
 import torch.nn.functional as F
 from pytorch_lightning.callbacks import LearningRateMonitor, ModelCheckpoint
 from pytorch_lightning.strategies import DDPStrategy
+from pytorch_lightning.loggers import CSVLogger
 from torch.optim import AdamW
 from torch.utils.data import DataLoader
 from torchmetrics import SpearmanCorrCoef, F1Score, PearsonCorrCoef, Precision, Recall, MeanSquaredError, Accuracy
@@ -189,31 +190,49 @@ class CosineSimilarityModel(pl.LightningModule):
         return [optimizer], [scheduler]
     
 if __name__ == '__main__':
-    # Get data from csvs and establish datasets
     train_d = pd.read_csv(train_path)
-    train_ds = EFPDataset(train_d)
     val_d = pd.read_csv(val_path)
-    val_ds = EFPDataset(val_d)
     test_d = pd.read_csv(test_path)
-    test_ds = EFPDataset(test_d)
 
-    # Establish DataLoaders for training, validation, and testing
-    train_dl = DataLoader(train_ds, batch_size=8, shuffle=True, num_workers=16)
-    val_dl = DataLoader(val_ds, batch_size=8, shuffle=False, num_workers=16)
-    test_dl = DataLoader(test_ds, batch_size=8, shuffle=False, num_workers=16)
+    # Work through loop for different epochs and different embedders
+    embedders = ["SBERT", "e5"]
+    epochs = [50, 100, 400]
+    for embedder in embedders:
+        for epoch in epochs:
+            if embedder == "e5" and epoch != 100:
+                continue
 
-    lr_monitor = LearningRateMonitor(logging_interval='step')
-    spearman_callback = ModelCheckpoint(save_top_k=1, monitor="val_spearman", mode="max")
+            # Establish DataLoaders for training, validation, and testing
+            train_ds = EFPDataset(train_d)
+            train_dl = DataLoader(train_ds, batch_size=8, shuffle=True, num_workers=16)
+            val_ds = EFPDataset(val_d)
+            val_dl = DataLoader(val_ds, batch_size=8, shuffle=False, num_workers=16)
+            test_ds = EFPDataset(test_d)
+            test_dl = DataLoader(test_ds, batch_size=8, shuffle=False, num_workers=16)
 
-    model = CosineSimilarityModel()
-    precision = 32
-    trainer = pl.Trainer(
-        log_every_n_steps=5,
-        max_epochs=int(1), # 50, 100, 400
-        accelerator="gpu",
-        callbacks=[lr_monitor, spearman_callback],
-        precision=precision,
-        strategy=DDPStrategy(find_unused_parameters=True)
-    )
-    trainer.fit(model=model,train_dataloaders=[train_dl], val_dataloaders = [val_dl])
-    trainer.test(model=model,dataloaders=[test_dl])
+            # Establish callbacks and logger
+            lr_monitor = LearningRateMonitor(logging_interval='step')
+            spearman_callback = ModelCheckpoint(save_top_k=1, monitor="val_spearman", mode="max")
+            logger = CSVLogger(save_dir="logs", name=f"cosine_similarity_model_{embedder}_{epoch}")
+            precision = 32
+
+            # Build model and trainer
+            model = CosineSimilarityModel(model=embedder)
+            trainer = pl.Trainer(
+                log_every_n_steps=5,
+                max_epochs=int(epoch), 
+                accelerator="gpu",
+                callbacks=[lr_monitor, spearman_callback],
+                precision=precision,
+                strategy=DDPStrategy(find_unused_parameters=True),
+                logger=logger
+            )
+            trainer.fit(model=model,train_dataloaders=[train_dl], val_dataloaders = [val_dl])
+            trainer.test(model=model,dataloaders=[test_dl])
+
+            # delete models and free GPU after use
+            model.cpu()
+            del model, trainer, train_ds, train_dl, val_ds, val_dl, test_ds, test_dl, logger, lr_monitor, spearman_callback
+            torch.cuda.empty_cache()
+            torch.cuda.reset_peak_memory_stats()
+            gc.collect()
