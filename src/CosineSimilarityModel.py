@@ -22,7 +22,7 @@ from torch.utils.data import DataLoader
 from torchmetrics import SpearmanCorrCoef, F1Score, PearsonCorrCoef, Precision, Recall, MeanSquaredError, Accuracy
 from transformers import get_linear_schedule_with_warmup
 from sentence_transformers import SentenceTransformer
-from EmpathyFromPerspectivesDataset import EFPDataset
+from DatasetList import EFPDataset
 import config as cfg
 
 # config and paths
