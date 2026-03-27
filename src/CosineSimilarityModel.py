@@ -128,16 +128,16 @@ class CosineSimilarityModel(pl.LightningModule):
         self.recall = self.recall.to(self.device)
         self.accuracy = self.accuracy.to(self.device)
         self.f1_score = self.f1_score.to(self.device)
-        precision = self.precision(cos_binary, empathy_binary)
-        recall = self.recall(cos_binary, empathy_binary)
-        accuracy = self.accuracy(cos_binary, empathy_binary)
-        f1 = self.f1_score(cos_binary, empathy_binary)
+        self.precision.update(cos_binary, empathy_binary)
+        self.recall.update(cos_binary, empathy_binary)
+        self.accuracy.update(cos_binary, empathy_binary)
+        self.f1_score.update(cos_binary, empathy_binary)
 
         # calculate evaluation metrics        
         self.spearman = self.spearman.to(self.device)
         self.pearson = self.pearson.to(self.device)
-        spearman = self.spearman(cos_sim.float(), empathy_score.float())
-        pearson = self.pearson(cos_sim.float(), empathy_score.float())
+        self.spearman.update(cos_sim.float(), empathy_score.float())
+        self.pearson.update(cos_sim.float(), empathy_score.float())
 
         
         # calculate loss
@@ -164,6 +164,35 @@ class CosineSimilarityModel(pl.LightningModule):
         self.log(prefix+"_recall", recall)
         self.log(prefix+"_accuracy", accuracy)
         self.log(prefix+"_mse", mse)
+        
+        # Reset metrics for next epoch
+        self.f1_score.reset()
+        self.spearman.reset()
+        self.pearson.reset()
+        self.precision.reset()
+        self.recall.reset()
+        self.accuracy.reset()
+        self.mse.reset()
+
+    def on_validation_epoch_start(self):
+        # Reset metrics at the start of validation epoch
+        self.f1_score.reset()
+        self.spearman.reset()
+        self.pearson.reset()
+        self.precision.reset()
+        self.recall.reset()
+        self.accuracy.reset()
+        self.mse.reset()
+
+    def on_test_epoch_start(self):
+        # Reset metrics at the start of test epoch
+        self.f1_score.reset()
+        self.spearman.reset()
+        self.pearson.reset()
+        self.precision.reset()
+        self.recall.reset()
+        self.accuracy.reset()
+        self.mse.reset()
 
     def on_validation_epoch_end(self):
         self.on_eval_end(prefix="val")
