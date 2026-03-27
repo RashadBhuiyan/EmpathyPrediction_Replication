@@ -153,8 +153,7 @@ class PPEPModel(pl.LightningModule):
         mlp_output = self.mlp(concatenated).squeeze(1)
 
         # Normalize empathy_score to [0, 1] range (binarize at median/mean for classification)
-        # Assume empathy_score is in range [1, 5] and convert to binary classification
-        threshold = 2.5  # Median of [1, 5]
+        threshold = 0.5  # Median of [0, 1]
         mlp_binary = (mlp_output >= threshold).int()
         empathy_binary = (empathy_score >= threshold).int()
 
