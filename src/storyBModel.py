@@ -1,9 +1,6 @@
 # MODEL UPDATES (TODO):
 # all of the following model updates are for unique model variants, not cumulative updates to the same model
-# 1. cosine-similarity is replaced with 3-layer MLP with input dimension of 768*2, and layer dimensions 768, 384, 192, followed by a sigmoid
 # 2. storyB only classifier replaces with 2-layer MLP with input dimension of 768 and layer dimensions of 384 and 192, followed by a sigmoid
-# 3. classifier with 2nd embeddings (ie. demographics or place and why) replaces with a 4-layer MLP with layer dimensions of 1536, 768, 384, 192, followed by a sigmoid --> CANNOT DO AS THERE IS NO DEMOGRAPHIC INFORMATION PROVIDED AS PART OF THE DATASET
-# 4. experiment s with e5 (embedding size of 1024), MLP input dimension is changes to 1024*2 and layer dimensions are 1024,512,192 followed by a sigmoid
 
 import gc
 import os
@@ -36,12 +33,12 @@ val_path = os.path.join(parent_dir, DATA_DIR, EFP_VAL)
 
 torch.set_float32_matmul_precision('high')
 
-# Define 3-Layer MLP architecture for PPEP model
+# Define 2-Layer MLP architecture for PPEP model
 class EmpathyMLP(nn.Module):
-    def __init__(self, input_dim=1536, hidden_dims=None):
+    def __init__(self, input_dim=768, hidden_dims=None):
         super(EmpathyMLP, self).__init__()
         if hidden_dims is None:
-            hidden_dims = [768, 384, 192]
+            hidden_dims = [384, 192]
         
         layers = []
         prev_dim = input_dim
@@ -61,13 +58,13 @@ class EmpathyMLP(nn.Module):
     def forward(self, x):
         return self.network(x)
 
-class PPEPModel(pl.LightningModule):
-    def __init__(self, model="SBERT", pooling="CLS", input_dim=1536, hidden_dims=None):
-        super(PPEPModel, self).__init__()
+class StoryBModel(pl.LightningModule):
+    def __init__(self, model="SBERT", pooling="CLS", input_dim=768, hidden_dims=None):
+        super(StoryBModel, self).__init__()
         self.base_model = model
         self.pooling = pooling
         self.input_dim = input_dim
-        self.hidden_dims = hidden_dims if hidden_dims is not None else [768, 384, 192]
+        self.hidden_dims = hidden_dims if hidden_dims is not None else [384, 192]
 
         # Load pre-trained model weights and initialize corresponding tokenizer.
         if self.base_model == "SBERT":
@@ -119,11 +116,10 @@ class PPEPModel(pl.LightningModule):
         empathy_score = batch[6]
 
         # use embeddings for MLP
-        storyA_emb = self(story_A)
         storyB_emb = self(story_B)
         
         # Concatenate embeddings and pass through MLP
-        concatenated = torch.cat([storyA_emb, storyB_emb], dim=1)
+        concatenated = torch.cat([storyB_emb], dim=1)
         mlp_output = self.mlp(concatenated).squeeze(1)
         
         # calculate loss
@@ -145,11 +141,10 @@ class PPEPModel(pl.LightningModule):
         empathy_score = batch[6]
 
         # use embeddings for MLP
-        storyA_emb = self(story_A)
         storyB_emb = self(story_B)
         
         # Concatenate embeddings and pass through MLP
-        concatenated = torch.cat([storyA_emb, storyB_emb], dim=1)
+        concatenated = torch.cat([storyB_emb], dim=1)
         mlp_output = self.mlp(concatenated).squeeze(1)
 
         # Normalize empathy_score to [0, 1] range (binarize at median/mean for classification)
@@ -257,47 +252,39 @@ if __name__ == '__main__':
     test_d = pd.read_csv(test_path)
 
     # Work through loop for different epochs and different embedders
-    embedders = ["SBERT", "e5"]
-    epochs = [1] # should be [100, 400]
-    for embedder in embedders:
-        for epoch in epochs:
-            if embedder == "e5" and epoch != 1: # should be != 100
-                continue
+    epochs = [1] # should be 400
+    for epoch in epochs:
+        # Establish DataLoaders for training, validation, and testing
+        train_ds = EFPDataset(train_d)
+        train_dl = DataLoader(train_ds, batch_size=8, shuffle=True, num_workers=16)
+        val_ds = EFPDataset(val_d)
+        val_dl = DataLoader(val_ds, batch_size=8, shuffle=False, num_workers=16)
+        test_ds = EFPDataset(test_d)
+        test_dl = DataLoader(test_ds, batch_size=8, shuffle=False, num_workers=16)
 
-            # Establish DataLoaders for training, validation, and testing
-            train_ds = EFPDataset(train_d)
-            train_dl = DataLoader(train_ds, batch_size=8, shuffle=True, num_workers=16)
-            val_ds = EFPDataset(val_d)
-            val_dl = DataLoader(val_ds, batch_size=8, shuffle=False, num_workers=16)
-            test_ds = EFPDataset(test_d)
-            test_dl = DataLoader(test_ds, batch_size=8, shuffle=False, num_workers=16)
+        # Establish callbacks and logger
+        lr_monitor = LearningRateMonitor(logging_interval='step')
+        spearman_callback = ModelCheckpoint(save_top_k=1, monitor="val_spearman", mode="max")
+        logger = CSVLogger(save_dir="logs", name=f"storyB_model_{epoch}")
+        precision = 32
 
-            # Establish callbacks and logger
-            lr_monitor = LearningRateMonitor(logging_interval='step')
-            spearman_callback = ModelCheckpoint(save_top_k=1, monitor="val_spearman", mode="max")
-            logger = CSVLogger(save_dir="logs", name=f"ppep_model_{embedder}_{epoch}")
-            precision = 32
+        # Build model and trainer
+        model = StoryBModel()
+        trainer = pl.Trainer(
+            log_every_n_steps=5,
+            max_epochs=int(epoch), 
+            accelerator="gpu",
+            callbacks=[lr_monitor, spearman_callback],
+            precision=precision,
+            strategy=DDPStrategy(find_unused_parameters=True),
+            logger=logger
+        )
+        trainer.fit(model=model,train_dataloaders=[train_dl], val_dataloaders = [val_dl])
+        trainer.test(model=model,dataloaders=[test_dl])
 
-            # Build model and trainer
-            if embedder == "e5":
-                model = PPEPModel(model=embedder, input_dim=2048, hidden_dims=[1024, 512, 192])
-            else:
-                model = PPEPModel(model=embedder)
-            trainer = pl.Trainer(
-                log_every_n_steps=5,
-                max_epochs=int(epoch), 
-                accelerator="gpu",
-                callbacks=[lr_monitor, spearman_callback],
-                precision=precision,
-                strategy=DDPStrategy(find_unused_parameters=True),
-                logger=logger
-            )
-            trainer.fit(model=model,train_dataloaders=[train_dl], val_dataloaders = [val_dl])
-            trainer.test(model=model,dataloaders=[test_dl])
-
-            # delete models and free GPU after use
-            model.cpu()
-            del model, trainer, train_ds, train_dl, val_ds, val_dl, test_ds, test_dl, logger, lr_monitor, spearman_callback
-            torch.cuda.empty_cache()
-            torch.cuda.reset_peak_memory_stats()
-            gc.collect()
+        # delete models and free GPU after use
+        model.cpu()
+        del model, trainer, train_ds, train_dl, val_ds, val_dl, test_ds, test_dl, logger, lr_monitor, spearman_callback
+        torch.cuda.empty_cache()
+        torch.cuda.reset_peak_memory_stats()
+        gc.collect()
