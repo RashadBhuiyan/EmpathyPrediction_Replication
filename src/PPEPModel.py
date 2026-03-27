@@ -1,212 +1,232 @@
 # MODEL UPDATES (TODO):
-# same hyperparameter values as empathic similarity model, except workers are reduced to 16 and increased number of epochs to 100 and 400 epochs for the models and datasets tested
-# Section 5 specified additional epoch testing information
-# SBERT not frozen
-# Adam optimizer with learning rate of 1e-6 was used
-# early stopping on validation data was used when training and checkpoint of current best model during training was saved
-# MSE loss between predicted empathy and human empathy ratings (both ranging 0 to 1) was used
-# validation loss was used to select the best-performing model
 # all of the following model updates are for unique model variants, not cumulative updates to the same model
-# 0. the base model is also used for testing, with minor changes to work with the EFP dataset (these are the only changes that should be applied to every model variant)
 # 1. cosine-similarity is replaced with 3-layer MLP with input dimension of 768*2, and layer dimensions 768, 384, 192, followed by a sigmoid
 # 2. storyB only classifier replaces with 2-layer MLP with input dimension of 768 and layer dimensions of 384 and 192, followed by a sigmoid
-# 3. classifier with 2nd embeddings (ie. demographics or place and why) replaces with a 4-layer MLP with layer dimensions of 1536, 768, 384, 192, followed by a sigmoid
+# 3. classifier with 2nd embeddings (ie. demographics or place and why) replaces with a 4-layer MLP with layer dimensions of 1536, 768, 384, 192, followed by a sigmoid --> CANNOT DO AS THERE IS NO DEMOGRAPHIC INFORMATION PROVIDED AS PART OF THE DATASET
 # 4. experiment s with e5 (embedding size of 1024), MLP input dimension is changes to 1024*2 and layer dimensions are 1024,512,192 followed by a sigmoid
 
-
+import gc
 import os
-
 import pandas as pd
-import pytorch_lightning as pl
 import torch
+import torch.nn as nn
+import pytorch_lightning as pl
 import torch.nn.functional as F
 from pytorch_lightning.callbacks import LearningRateMonitor, ModelCheckpoint
 from pytorch_lightning.strategies import DDPStrategy
+from pytorch_lightning.loggers import CSVLogger
 from torch.optim import AdamW
 from torch.utils.data import DataLoader
-from torchmetrics import SpearmanCorrCoef, F1Score
-from transformers import get_linear_schedule_with_warmup, AutoTokenizer, AutoModelForSeq2SeqLM, BartModel
+from torchmetrics import SpearmanCorrCoef, F1Score, PearsonCorrCoef, Precision, Recall, MeanSquaredError, Accuracy
+from transformers import get_linear_schedule_with_warmup
 from sentence_transformers import SentenceTransformer
-import argparse 
-from model.EmpathicSummaryModel import EmpathicSummaryModel
-from omegaconf import OmegaConf
+from EmpathyFromPerspectivesDataset import EFPDataset
+import config as cfg
 
+# config and paths
+config = cfg.load_config()
+DATA_DIR = config["DATA_DIR"]
+EFP_TRAIN = config["EFP_TRAIN"]
+EFP_TEST = config["EFP_TEST"]
+EFP_VAL = config["EFP_VAL"]
+parent_dir = os.path.abspath(os.path.join(os.getcwd(), os.pardir))
+train_path = os.path.join(parent_dir, DATA_DIR, EFP_TRAIN)
+test_path = os.path.join(parent_dir, DATA_DIR, EFP_TEST)
+val_path = os.path.join(parent_dir, DATA_DIR, EFP_VAL)
 
-import sys
-sys.path.append("./")
+torch.set_float32_matmul_precision('high')
 
-class EmpathicSimilarityModel(pl.LightningModule):
-    def __init__(self, model="BART", pooling="CLS", bin=True, losses="MSE", use_pretrained=False):
-        super(EmpathicSimilarityModel, self).__init__()
+# Define 3-Layer MLP architecture for PPEP model
+class EmpathyMLP(nn.Module):
+    def __init__(self, input_dim=1536, hidden_dims=None):
+        super(EmpathyMLP, self).__init__()
+        if hidden_dims is None:
+            hidden_dims = [768, 384, 192]
+        
+        layers = []
+        prev_dim = input_dim
+        
+        # Build hidden layers
+        for hidden_dim in hidden_dims:
+            layers.append(nn.Linear(prev_dim, hidden_dim))
+            layers.append(nn.ReLU())
+            prev_dim = hidden_dim
+        
+        # Output layer
+        layers.append(nn.Linear(prev_dim, 1))
+        layers.append(nn.Sigmoid())
+        
+        self.network = nn.Sequential(*layers)
+    
+    def forward(self, x):
+        return self.network(x)
+
+class PPEPModel(pl.LightningModule):
+    def __init__(self, model="SBERT", pooling="CLS", input_dim=1536, hidden_dims=None):
+        super(PPEPModel, self).__init__()
         self.base_model = model
         self.pooling = pooling
-        self.bin = bin
-        self.losses = losses
-        self.use_pretrained = use_pretrained
+        self.input_dim = input_dim
+        self.hidden_dims = hidden_dims if hidden_dims is not None else [768, 384, 192]
 
         # Load pre-trained model weights and initialize corresponding tokenizer.
         if self.base_model == "SBERT":
             self.model = SentenceTransformer("multi-qa-mpnet-base-dot-v1")
             self.tokenizer = self.model.tokenizer
         else:
-            if self.use_pretrained:
-                self.lm_model = EmpathicSummaryModel.load_from_checkpoint("/u/joceshen/socially_connective_dialogue/lightning_logs/version_63/checkpoints/epoch=36-step=5439.ckpt", hp=OmegaConf.load("/u/joceshen/socially_connective_dialogue/config/BART_summary.yaml"))
-                self.model = self.lm_model.model
-                self.tokenizer = self.lm_model.tokenizer
-            else:
-                self.lm_model = AutoModelForSeq2SeqLM.from_pretrained("facebook/bart-base")
-                self.model = self.lm_model.model
-                self.tokenizer = AutoTokenizer.from_pretrained("facebook/bart-base")
-        if self.base_model == "SBERT":
-            self.learning_rate = 1e-6
-        else:
-            self.learning_rate = 5e-6
+            self.model = SentenceTransformer("intfloat/e5-large-v2")
+            self.tokenizer = self.model.tokenizer
+
+        self.learning_rate = 1e-6
+        
+        # Initialize MLP for empathy prediction
+        self.mlp = EmpathyMLP(input_dim=self.input_dim, hidden_dims=self.hidden_dims)
+
+        # load evaluation metrics
         self.f1_score = F1Score(task="binary")
         self.spearman = SpearmanCorrCoef()
+        self.pearson = PearsonCorrCoef()
+        self.precision = Precision(task="binary")
+        self.recall = Recall(task="binary")
+        self.mse = MeanSquaredError()
+        self.accuracy = Accuracy(task="binary")
 
     def forward(self, story):
         story = self.tokenizer(story,padding=True,truncation=True,return_tensors="pt")
         for k in story:
             story[k] = story[k].to(self.device)
-        if self.base_model == "SBERT":
-            embedding = self.model(story)
-            if self.pooling == "MEAN":
-                sentence_representation = embedding.sentence_embedding
-            else:
-                sentence_representation = self.cls_pooling(embedding.token_embeddings)
+        
+        embedding = self.model(story)
+        if self.pooling == "MEAN":
+            sentence_representation = embedding.sentence_embedding
         else:
-            embedding = self.model(**story,output_hidden_states=True) 
-            if self.pooling == "MEAN":
-                attn = story['attention_mask']
-                if self.use_pretrained:
-                    sentence_representation = ( embedding.encoder_last_hidden_state * attn.unsqueeze(-1)).sum(-2) / attn.sum(dim=-1).unsqueeze(-1)
-                else:
-                    sentence_representation = ( embedding.last_hidden_state * attn.unsqueeze(-1)).sum(-2) / attn.sum(dim=-1).unsqueeze(-1)
-            else:
-                hidden_states = embedding[0]  # last hidden state
+            sentence_representation = self.cls_pooling(embedding.token_embeddings)
 
-                eos_mask = story["input_ids"].eq(self.model.config.eos_token_id).to(hidden_states.device)
-                sentence_representation = hidden_states[eos_mask, :].view(hidden_states.size(0), -1, hidden_states.size(-1))[
-                    :, -1, :
-                ]
         return sentence_representation
 
     def cls_pooling(self, token_embeddings):
         return token_embeddings[:,0]
 
     def training_step(self, batch, batch_idx):
-        # training_step defines the train loop.
-        # it is independent of forward
+        # get batch information
         batch = batch[0]
-        story1 = batch[0]
-        story2 = batch[1]
-        score = batch[2]
-        if self.bin:
-            score = (score>2.5).float().to(self.device)
-        sentence_representation1 = self(story1)
-        sentence_representation2 = self(story2)
-        loss = 0
-        cos_sim = F.cosine_similarity(sentence_representation1, sentence_representation2)
-        if "MSE" in self.losses:
-            mse_loss = F.mse_loss(cos_sim, score)
-            self.log("train_loss (mse)", mse_loss)
-            loss += mse_loss
-        if "COS" in self.losses:
-            pos_labels = (score > 2.5).float()
-            neg_labels = -1 * (score <= 2.5).float()
-            cos_embedding_loss = F.cosine_embedding_loss(sentence_representation1, sentence_representation2, pos_labels + neg_labels )
-            loss += cos_embedding_loss
-            self.log("train_loss (cos)", cos_embedding_loss)   
-        if "BCE" in self.losses:
-            bce_loss = F.binary_cross_entropy_with_logits(cos_sim, score)
-            loss += bce_loss 
-            self.log("train_loss (bce)", bce_loss)
-        if "LM" in self.losses:
-            target1 = self.tokenizer(batch[3],padding=True,truncation=True,return_tensors="pt")
-            for k in target1:
-                target1[k] = target1[k].to(self.device)
-            target2 = self.tokenizer(batch[4],padding=True,truncation=True,return_tensors="pt")
-            for k in target2:
-                target2[k] = target2[k].to(self.device)
-            tokens1 = self.tokenizer(story1,padding=True,truncation=True,return_tensors="pt")
-            for k in tokens1:
-                tokens1[k] = tokens1[k].to(self.device)
-            tokens2 = self.tokenizer(story2,padding=True,truncation=True,return_tensors="pt")
-            for k in tokens2:
-                tokens2[k] = tokens2[k].to(self.device)
-            output1 = self.model(**tokens1, labels=target1["input_ids"], output_hidden_states=True)
-            output2 = self.model(**tokens2, labels=target2["input_ids"], output_hidden_states=True)
-            loss1 = output1.loss
-            loss2 = output2.loss
-            lm_losses = loss1 + loss2
-            loss += lm_losses
-            self.log("train_loss (lm)", lm_losses)
+        place_A = batch[0]
+        why_A = batch[1]
+        story_A = batch[2]
+        place_B = batch[3]
+        why_B = batch[4]
+        story_B = batch[5]
+        empathy_score = batch[6]
 
+        # use embeddings for MLP
+        storyA_emb = self(story_A)
+        storyB_emb = self(story_B)
+        
+        # Concatenate embeddings and pass through MLP
+        concatenated = torch.cat([storyA_emb, storyB_emb], dim=1)
+        mlp_output = self.mlp(concatenated).squeeze(1)
+        
+        # calculate loss
+        self.mse = self.mse.to(self.device)
+        loss = 0
+        loss += self.mse(mlp_output, empathy_score)
         self.log("train_loss", loss)
         return loss
 
     def eval_step(self,batch,batch_idx,prefix):
-        # training_step defines the train loop.
-        # it is independent of forward
+        # get batch information
         # batch = batch[0]
-        story1 = batch[0]
-        story2 = batch[1]
-        score = batch[2]
-        if self.bin or "BCE" in self.losses:
-            score = (score>2.5).float().to(self.device)
-        sentence_representation1 = self(story1)
-        sentence_representation2 = self(story2)
-        loss = 0
-        cos_sim = F.cosine_similarity(sentence_representation1, sentence_representation2)
-        self.f1_score = self.f1_score.to(self.device)
-        self.spearman = self.spearman.to(self.device)
-        f1 = self.f1_score(cos_sim,score)
-        spearman = self.spearman(cos_sim.float(), batch[2])
-        
-        if "MSE" in self.losses:
-            mse_loss = F.mse_loss(cos_sim, score)
-            self.log(prefix+"_loss (mse)", mse_loss)
-            loss += mse_loss
-        if "COS" in self.losses:
-            pos_labels = (score > 2.5).float()
-            neg_labels = -1 * (score <= 2.5).float()
-            cos_embedding_loss = F.cosine_embedding_loss(sentence_representation1, sentence_representation2, pos_labels + neg_labels )
-            loss += cos_embedding_loss
-            self.log(prefix+"_loss (cos)", cos_embedding_loss)   
-        if "BCE" in self.losses:
-            bce_loss = F.binary_cross_entropy(cos_sim, score)
-            loss += bce_loss 
-            self.log(prefix+"_loss (bce)", bce_loss)
-        if "LM" in self.losses:
-            target1 = self.tokenizer(batch[3],padding=True,truncation=True,return_tensors="pt")
-            for k in target1:
-                target1[k] = target1[k].to(self.device)
-            target2 = self.tokenizer(batch[4],padding=True,truncation=True,return_tensors="pt")
-            for k in target2:
-                target2[k] = target2[k].to(self.device)
-            tokens1 = self.tokenizer(story1,padding=True,truncation=True,return_tensors="pt")
-            for k in tokens1:
-                tokens1[k] = tokens1[k].to(self.device)
-            tokens2 = self.tokenizer(story2,padding=True,truncation=True,return_tensors="pt")
-            for k in tokens2:
-                tokens2[k] = tokens2[k].to(self.device)
-            output1 = self.model(**tokens1, labels=target1["input_ids"], output_hidden_states=True)
-            output2 = self.model(**tokens2, labels=target2["input_ids"], output_hidden_states=True)
-            loss1 = output1.loss
-            loss2 = output2.loss
-            lm_losses = loss1 + loss2
-            loss += lm_losses
-            self.log(prefix+"_loss (lm)", lm_losses)
-            
+        place_A = batch[0]
+        why_A = batch[1]
+        story_A = batch[2]
+        place_B = batch[3]
+        why_B = batch[4]
+        story_B = batch[5]
+        empathy_score = batch[6]
 
+        # use embeddings for MLP
+        storyA_emb = self(story_A)
+        storyB_emb = self(story_B)
+        
+        # Concatenate embeddings and pass through MLP
+        concatenated = torch.cat([storyA_emb, storyB_emb], dim=1)
+        mlp_output = self.mlp(concatenated).squeeze(1)
+
+        # Normalize empathy_score to [0, 1] range (binarize at median/mean for classification)
+        # Assume empathy_score is in range [1, 5] and convert to binary classification
+        threshold = 2.5  # Median of [1, 5]
+        mlp_binary = (mlp_output >= threshold).int()
+        empathy_binary = (empathy_score >= threshold).int()
+
+        # evaluation metric with binarized values
+        self.precision = self.precision.to(self.device)
+        self.recall = self.recall.to(self.device)
+        self.accuracy = self.accuracy.to(self.device)
+        self.f1_score = self.f1_score.to(self.device)
+        self.precision.update(mlp_binary, empathy_binary)
+        self.recall.update(mlp_binary, empathy_binary)
+        self.accuracy.update(mlp_binary, empathy_binary)
+        self.f1_score.update(mlp_binary, empathy_binary)
+
+        # calculate evaluation metrics        
+        self.spearman = self.spearman.to(self.device)
+        self.pearson = self.pearson.to(self.device)
+        self.spearman.update(mlp_output.float(), empathy_score.float())
+        self.pearson.update(mlp_output.float(), empathy_score.float())
+
+        
+        # calculate loss
+        self.mse = self.mse.to(self.device)
+        loss = self.mse(mlp_output, empathy_score)
         self.log(prefix+"_loss", loss)
         return loss
     
     def on_eval_end(self,prefix):
+        # Compute metrics at the end of the epoch and log them
         f1 = self.f1_score.compute()
         spearman = self.spearman.compute()
+        pearson = self.pearson.compute()
+        precision = self.precision.compute()
+        recall = self.recall.compute()
+        accuracy = self.accuracy.compute()
+        mse = self.mse.compute()
+
         self.log(prefix+"_f1", f1)
         self.log(prefix+"_spearman", spearman)
+        self.log(prefix+"_pearson", pearson)
+        self.log(prefix+"_precision", precision)
+        self.log(prefix+"_recall", recall)
+        self.log(prefix+"_accuracy", accuracy)
+        self.log(prefix+"_mse", mse)
+        
+        # Reset metrics for next epoch
+        self.f1_score.reset()
+        self.spearman.reset()
+        self.pearson.reset()
+        self.precision.reset()
+        self.recall.reset()
+        self.accuracy.reset()
+        self.mse.reset()
+
+    def on_validation_epoch_start(self):
+        # Reset metrics at the start of validation epoch
+        self.f1_score.reset()
+        self.spearman.reset()
+        self.pearson.reset()
+        self.precision.reset()
+        self.recall.reset()
+        self.accuracy.reset()
+        self.mse.reset()
+
+    def on_test_epoch_start(self):
+        # Reset metrics at the start of test epoch
+        self.f1_score.reset()
+        self.spearman.reset()
+        self.pearson.reset()
+        self.precision.reset()
+        self.recall.reset()
+        self.accuracy.reset()
+        self.mse.reset()
 
     def on_validation_epoch_end(self):
         self.on_eval_end(prefix="val")
@@ -223,107 +243,62 @@ class EmpathicSimilarityModel(pl.LightningModule):
         return r
 
     def configure_optimizers(self):
-        # optimizer = optim.Adam(self.parameters(), lr=self.hp.train.adam.lr)
         optimizer = AdamW(self.parameters(), lr=self.learning_rate)
-        if self.base_model == "SBERT":
-            scheduler = get_linear_schedule_with_warmup(
-                optimizer,
-                num_warmup_steps=0.5 * self.trainer.estimated_stepping_batches,
-                num_training_steps=self.trainer.estimated_stepping_batches,
-            )
-        else:
-            scheduler = get_linear_schedule_with_warmup(
-                optimizer,
-                num_warmup_steps=0.1 * self.trainer.estimated_stepping_batches,
-                num_training_steps=self.trainer.estimated_stepping_batches,
-            )
+        scheduler = get_linear_schedule_with_warmup(
+            optimizer,
+            num_warmup_steps=0.5 * self.trainer.estimated_stepping_batches,
+            num_training_steps=self.trainer.estimated_stepping_batches,
+        )
         scheduler = {"scheduler": scheduler, "interval": "step", "frequency": 1}
         return [optimizer], [scheduler]
-
-
-class EmpathicStoriesDataset(torch.utils.data.Dataset):
-    def __init__(self, data, data_stories, limit=-1, use_pretrained = False):
-        self.data = data
-        self.data_stories = data_stories
-        self.limit = limit
-        self.use_pretrained = use_pretrained
-
-    def __getitem__(self, idx):
-        i = self.data.iloc[idx]
-        s1 = i["story_A"].replace("\n", "")
-        s2 = i["story_B"].replace("\n", "")
-        score = i["similarity_empathy_human_AGG"]
-        pair_id = eval(i["pairs"])
-        event1 = self.data_stories.iloc[pair_id[0]]["Main Event"]
-        event2 = self.data_stories.iloc[pair_id[1]]["Main Event"]
-        emotion1 = self.data_stories.iloc[pair_id[0]]["Emotion Description"]
-        emotion2 = self.data_stories.iloc[pair_id[1]]["Emotion Description"]
-        moral1 = self.data_stories.iloc[pair_id[0]]["Moral"]
-        moral2 = self.data_stories.iloc[pair_id[1]]["Moral"]
-        s1_summary = "[EVE]" + event1 + "[EMO]" + emotion1 + "[MOR]" + moral1
-        s2_summary = "[EVE]" + event2 + "[EMO]" + emotion2 + "[MOR]" + moral2
-
-        if self.use_pretrained:
-            return [s1, s2, score, s1_summary, s2_summary]
-        else:
-            return [s1, s2, score]
-
-    def __len__(self):
-        if self.limit!=-1:
-            return self.limit
-        return len(self.data)
-
-os.environ["WANDB_API_KEY"] = "2aa34769ea8ae63060a052e485040b683333dfed"
-
+    
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-m', '--model', type=str, required=True,
-                        help="model")
-    parser.add_argument('-p', '--pooling', type=str, required=True,
-                        help="pooling")
-    parser.add_argument('-e', '--epochs', type=str, required=True,
-                        help="epochs")
-    parser.add_argument('-b', '--bin', type=str, required=True,
-                        help="bin")
-    parser.add_argument('-l', '--losses', type=str, required=True,
-                        help="losses")
-    parser.add_argument('-u', '--use_pretrained', type=str, required=True,
-                        help="use_pretrained")
-    args = parser.parse_args()
-    train_d = pd.read_csv("data/PAIRS (train).csv")
-    train_d2 = pd.read_csv("data/STORIES (train).csv")
-    train_ds = EmpathicStoriesDataset(train_d, train_d2, use_pretrained=args.use_pretrained)
-    train_dl = DataLoader(train_ds, batch_size=8, shuffle=True)
-    val_d = pd.read_csv("data/PAIRS (dev).csv")
-    val_d2 = pd.read_csv("data/STORIES (dev).csv")
-    val_ds = EmpathicStoriesDataset(val_d, val_d2, use_pretrained=args.use_pretrained)
-    val_dl = DataLoader(val_ds, batch_size=8, shuffle=False)
-    test_d = pd.read_csv("data/PAIRS (test).csv")
-    test_d2 = pd.read_csv("data/STORIES (test).csv")
-    test_ds = EmpathicStoriesDataset(test_d, test_d2, use_pretrained=args.use_pretrained)
-    test_dl = DataLoader(test_ds, batch_size=8, shuffle=False)
+    train_d = pd.read_csv(train_path)
+    val_d = pd.read_csv(val_path)
+    test_d = pd.read_csv(test_path)
 
-    lr_monitor = LearningRateMonitor(logging_interval='step')
-    spearman_callback = ModelCheckpoint(save_top_k=1, monitor="val_spearman", mode="max")
-    # wandb_logger = WandbLogger("jocelyn_struggle", project="jocelynstuff")
+    # Work through loop for different epochs and different embedders
+    embedders = ["SBERT", "e5"]
+    epochs = [100, 400]
+    for embedder in embedders:
+        for epoch in epochs:
+            if embedder == "e5" and epoch != 100:
+                continue
 
-    model = EmpathicSimilarityModel(
-        model=args.model, 
-        pooling = args.pooling, 
-        bin =bool(args.bin),
-        losses=args.losses,
-        use_pretrained = bool(args.use_pretrained)
-    )
-    precision = 16
-    trainer = pl.Trainer(
-        log_every_n_steps=5,
-        max_epochs=int(args.epochs),
-        accelerator="gpu",
-        callbacks=[lr_monitor, spearman_callback],
-        precision=precision,
-        strategy=DDPStrategy(find_unused_parameters=True)
-        # logger=wandb_logger
+            # Establish DataLoaders for training, validation, and testing
+            train_ds = EFPDataset(train_d)
+            train_dl = DataLoader(train_ds, batch_size=8, shuffle=True, num_workers=16)
+            val_ds = EFPDataset(val_d)
+            val_dl = DataLoader(val_ds, batch_size=8, shuffle=False, num_workers=16)
+            test_ds = EFPDataset(test_d)
+            test_dl = DataLoader(test_ds, batch_size=8, shuffle=False, num_workers=16)
 
-    )
-    trainer.fit(model=model,train_dataloaders=[train_dl], val_dataloaders = [val_dl])
-    trainer.test(model=model,dataloaders=[test_dl])
+            # Establish callbacks and logger
+            lr_monitor = LearningRateMonitor(logging_interval='step')
+            spearman_callback = ModelCheckpoint(save_top_k=1, monitor="val_spearman", mode="max")
+            logger = CSVLogger(save_dir="logs", name=f"ppep_model_{embedder}_{epoch}")
+            precision = 32
+
+            # Build model and trainer
+            if embedder == "e5":
+                model = PPEPModel(model=embedder, input_dim=2048, hidden_dims=[1024, 512, 192])
+            else:
+                model = PPEPModel(model=embedder)
+            trainer = pl.Trainer(
+                log_every_n_steps=5,
+                max_epochs=int(epoch), 
+                accelerator="gpu",
+                callbacks=[lr_monitor, spearman_callback],
+                precision=precision,
+                strategy=DDPStrategy(find_unused_parameters=True),
+                logger=logger
+            )
+            trainer.fit(model=model,train_dataloaders=[train_dl], val_dataloaders = [val_dl])
+            trainer.test(model=model,dataloaders=[test_dl])
+
+            # delete models and free GPU after use
+            model.cpu()
+            del model, trainer, train_ds, train_dl, val_ds, val_dl, test_ds, test_dl, logger, lr_monitor, spearman_callback
+            torch.cuda.empty_cache()
+            torch.cuda.reset_peak_memory_stats()
+            gc.collect()
