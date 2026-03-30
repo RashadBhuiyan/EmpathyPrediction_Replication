@@ -139,7 +139,7 @@ class ContextModel(pl.LightningModule):
 
     def eval_step(self,batch,batch_idx,prefix):
         # get batch information
-        # batch = batch[0]
+        batch = batch[0]
         place_A = batch[0]
         why_A = batch[1]
         story_A = batch[2]
@@ -265,7 +265,7 @@ if __name__ == '__main__':
     test_d = pd.read_csv(test_path)
 
     # Work through loop for different epochs and different embedders
-    epochs = [1] # should be [100]
+    epochs = [100] # should be [100]
     for epoch in epochs:
         # Establish DataLoaders for training, validation, and testing
         train_ds = EFPDataset(train_d)

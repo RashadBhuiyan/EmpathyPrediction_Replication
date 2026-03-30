@@ -1,0 +1,548 @@
+W0330 15:09:30.673000 2067408 torch/utils/flop_counter.py:29] triton not found; flop counting will not work for triton kernels
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/torch/utils/data/dataloader.py:424: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 6, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  self.check_worker_number_rationality()
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 2535.26it/s]
+[1mMPNetModel LOAD REPORT[0m from: sentence-transformers/multi-qa-mpnet-base-dot-v1
+Key                     | Status     |  | 
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/torchmetrics/utilities/prints.py:43: UserWarning: Metric `SpearmanCorrcoef` will save all targets and predictions in the buffer. For large datasets, this may lead to large memory footprint.
+  warnings.warn(*args, **kwargs)
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/lightning_fabric/plugins/environments/slurm.py:204: The `srun` command is available on your system but is not used. HINT: If your intention is to run Lightning on SLURM, prepend your python command with `srun` like so: srun python PPEPModel.py ...
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+Initializing distributed: GLOBAL_RANK: 0, MEMBER: 1/1
+----------------------------------------------------------------------------------------------------
+distributed_backend=nccl
+All distributed processes registered. Starting with 1 processes
+----------------------------------------------------------------------------------------------------
+
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Loading `train_dataloader` to estimate number of stepping batches.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/utilities/_pytree.py:21: `isinstance(treespec, LeafSpec)` is deprecated, use `isinstance(treespec, TreeSpec) and treespec.is_leaf()` instead.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/torch/utils/data/dataloader.py:432: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 6, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  self.check_worker_number_rationality()
+┏━━━┳━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┳━━━━━━━┓
+┃   ┃ Name      ┃ Type                ┃ Params ┃ Mode  ┃ FLOPs ┃
+┡━━━╇━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━╇━━━━━━━┩
+│ 0 │ model     │ SentenceTransformer │  109 M │ train │     0 │
+│ 1 │ mlp       │ EmpathyMLP          │  1.5 M │ train │     0 │
+│ 2 │ f1_score  │ BinaryF1Score       │      0 │ train │     0 │
+│ 3 │ spearman  │ SpearmanCorrCoef    │      0 │ train │     0 │
+│ 4 │ pearson   │ PearsonCorrCoef     │      0 │ train │     0 │
+│ 5 │ precision │ BinaryPrecision     │      0 │ train │     0 │
+│ 6 │ recall    │ BinaryRecall        │      0 │ train │     0 │
+│ 7 │ mse       │ MeanSquaredError    │      0 │ train │     0 │
+│ 8 │ accuracy  │ BinaryAccuracy      │      0 │ train │     0 │
+└───┴───────────┴─────────────────────┴────────┴───────┴───────┘
+Trainable params: 111 M                                                         
+Non-trainable params: 0                                                         
+Total params: 111 M                                                             
+Total estimated model params size (MB): 444                                     
+Modules in train mode: 20                                                       
+Modules in eval mode: 216                                                       
+Total FLOPs: 0                                                                  
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('val_loss', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('val_f1', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('val_spearman', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('val_pearson', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('val_precision', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('val_recall', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('val_accuracy', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('val_mse', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/loops/fit_loop.py:534: Found 216 module(s) in eval mode at the start of training. This may lead to unexpected behavior during training. If this is intentional, you can ignore this warning.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/torch/autograd/graph.py:869: UserWarning: The AccumulateGrad node's stream does not match the stream of the node that produced the incoming gradient. This may incur unnecessary synchronization and break CUDA graph capture if the AccumulateGrad node's stream is the default stream. This mismatch is caused by an AccumulateGrad node created prior to the current iteration being kept alive. This can happen if the autograd graph is still being kept alive by tensors such as the loss, or if you are using DDP, which will stash a reference to the node. To resolve the mismatch, delete all references to the autograd graph or ensure that DDP initialization is performed under the same stream as subsequent forwards. If the mismatch is intentional, you can use torch.autograd.graph.set_warn_on_accumulate_grad_stream_mismatch(False) to suppress this warning. (Triggered internally at /tmp/build_wheels_tmp.5682/python-3.11/torch/torch/csrc/autograd/input_buffer.cpp:240.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+`Trainer.fit` stopped: `max_epochs=1` reached.
+Epoch 0/0  ━━━━━━━━━━━━━━━━━━━━ 303/303 0:00:13 • 0:00:00 23.45it/s v_num: 0.000
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('eval_loss', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('eval_f1', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('eval_spearman', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('eval_pearson', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('eval_precision', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('eval_recall', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('eval_accuracy', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('eval_mse', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│       eval_accuracy       │    0.3788343667984009     │
+│          eval_f1          │            0.0            │
+│         eval_loss         │    0.08981071412563324    │
+│         eval_mse          │    0.08981071412563324    │
+│       eval_pearson        │   0.027613462880253792    │
+│      eval_precision       │            0.0            │
+│        eval_recall        │            0.0            │
+│       eval_spearman       │   0.026326853781938553    │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 82/82 0:00:01 • 0:00:00 59.00it/s 
+Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]Loading weights: 100%|██████████| 391/391 [00:00<00:00, 12608.10it/s]
+[1mBertModel LOAD REPORT[0m from: intfloat/e5-large-v2
+Key                     | Status     |  | 
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Loading `train_dataloader` to estimate number of stepping batches.
+┏━━━┳━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┳━━━━━━━┓
+┃   ┃ Name      ┃ Type                ┃ Params ┃ Mode  ┃ FLOPs ┃
+┡━━━╇━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━╇━━━━━━━┩
+│ 0 │ model     │ SentenceTransformer │  335 M │ train │     0 │
+│ 1 │ mlp       │ EmpathyMLP          │  2.7 M │ train │     0 │
+│ 2 │ f1_score  │ BinaryF1Score       │      0 │ train │     0 │
+│ 3 │ spearman  │ SpearmanCorrCoef    │      0 │ train │     0 │
+│ 4 │ pearson   │ PearsonCorrCoef     │      0 │ train │     0 │
+│ 5 │ precision │ BinaryPrecision     │      0 │ train │     0 │
+│ 6 │ recall    │ BinaryRecall        │      0 │ train │     0 │
+│ 7 │ mse       │ MeanSquaredError    │      0 │ train │     0 │
+│ 8 │ accuracy  │ BinaryAccuracy      │      0 │ train │     0 │
+└───┴───────────┴─────────────────────┴────────┴───────┴───────┘
+Trainable params: 337 M                                                         
+Non-trainable params: 0                                                         
+Total params: 337 M                                                             
+Total estimated model params size (MB): 1.4 K                                   
+Modules in train mode: 21                                                       
+Modules in eval mode: 444                                                       
+Total FLOPs: 0                                                                  
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/loops/fit_loop.py:534: Found 444 module(s) in eval mode at the start of training. This may lead to unexpected behavior during training. If this is intentional, you can ignore this warning.
+`Trainer.fit` stopped: `max_epochs=1` reached.
+Epoch 0/0  ━━━━━━━━━━━━━━━━━━━━ 303/303 0:00:21 • 0:00:00 14.35it/s v_num: 0.000
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│       eval_accuracy       │    0.6211656332015991     │
+│          eval_f1          │     0.766319751739502     │
+│         eval_loss         │    0.0861814096570015     │
+│         eval_mse          │    0.0861814096570015     │
+│       eval_pearson        │    0.06982050091028214    │
+│      eval_precision       │    0.6211656332015991     │
+│        eval_recall        │            1.0            │
+│       eval_spearman       │    0.06221857666969299    │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 82/82 0:00:01 • 0:00:00 51.87it/s 
+W0330 15:11:09.071000 2069555 torch/utils/flop_counter.py:29] triton not found; flop counting will not work for triton kernels
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/torch/utils/data/dataloader.py:424: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 6, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  self.check_worker_number_rationality()
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 23355.15it/s]
+[1mMPNetModel LOAD REPORT[0m from: sentence-transformers/multi-qa-mpnet-base-dot-v1
+Key                     | Status     |  | 
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/torchmetrics/utilities/prints.py:43: UserWarning: Metric `SpearmanCorrcoef` will save all targets and predictions in the buffer. For large datasets, this may lead to large memory footprint.
+  warnings.warn(*args, **kwargs)
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/lightning_fabric/plugins/environments/slurm.py:204: The `srun` command is available on your system but is not used. HINT: If your intention is to run Lightning on SLURM, prepend your python command with `srun` like so: srun python CosineSimilarityModel.py ...
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+Initializing distributed: GLOBAL_RANK: 0, MEMBER: 1/1
+----------------------------------------------------------------------------------------------------
+distributed_backend=nccl
+All distributed processes registered. Starting with 1 processes
+----------------------------------------------------------------------------------------------------
+
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Loading `train_dataloader` to estimate number of stepping batches.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/utilities/_pytree.py:21: `isinstance(treespec, LeafSpec)` is deprecated, use `isinstance(treespec, TreeSpec) and treespec.is_leaf()` instead.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/torch/utils/data/dataloader.py:432: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 6, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  self.check_worker_number_rationality()
+┏━━━┳━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┳━━━━━━━┓
+┃   ┃ Name      ┃ Type                ┃ Params ┃ Mode  ┃ FLOPs ┃
+┡━━━╇━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━╇━━━━━━━┩
+│ 0 │ model     │ SentenceTransformer │  109 M │ train │     0 │
+│ 1 │ f1_score  │ BinaryF1Score       │      0 │ train │     0 │
+│ 2 │ spearman  │ SpearmanCorrCoef    │      0 │ train │     0 │
+│ 3 │ pearson   │ PearsonCorrCoef     │      0 │ train │     0 │
+│ 4 │ precision │ BinaryPrecision     │      0 │ train │     0 │
+│ 5 │ recall    │ BinaryRecall        │      0 │ train │     0 │
+│ 6 │ mse       │ MeanSquaredError    │      0 │ train │     0 │
+│ 7 │ accuracy  │ BinaryAccuracy      │      0 │ train │     0 │
+└───┴───────────┴─────────────────────┴────────┴───────┴───────┘
+Trainable params: 109 M                                                         
+Non-trainable params: 0                                                         
+Total params: 109 M                                                             
+Total estimated model params size (MB): 437                                     
+Modules in train mode: 10                                                       
+Modules in eval mode: 216                                                       
+Total FLOPs: 0                                                                  
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('train_loss', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('val_f1', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('val_spearman', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('val_pearson', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('val_precision', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('val_recall', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('val_accuracy', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('val_mse', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/loops/fit_loop.py:534: Found 216 module(s) in eval mode at the start of training. This may lead to unexpected behavior during training. If this is intentional, you can ignore this warning.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/torch/autograd/graph.py:869: UserWarning: The AccumulateGrad node's stream does not match the stream of the node that produced the incoming gradient. This may incur unnecessary synchronization and break CUDA graph capture if the AccumulateGrad node's stream is the default stream. This mismatch is caused by an AccumulateGrad node created prior to the current iteration being kept alive. This can happen if the autograd graph is still being kept alive by tensors such as the loss, or if you are using DDP, which will stash a reference to the node. To resolve the mismatch, delete all references to the autograd graph or ensure that DDP initialization is performed under the same stream as subsequent forwards. If the mismatch is intentional, you can use torch.autograd.graph.set_warn_on_accumulate_grad_stream_mismatch(False) to suppress this warning. (Triggered internally at /tmp/build_wheels_tmp.5682/python-3.11/torch/torch/csrc/autograd/input_buffer.cpp:240.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+`Trainer.fit` stopped: `max_epochs=1` reached.
+Epoch 0/0  ━━━━━━━━━━━━━━━━━━━━ 303/303 0:00:12 • 0:00:00 24.32it/s v_num: 0.000
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('eval_f1', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('eval_spearman', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('eval_pearson', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('eval_precision', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('eval_recall', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('eval_accuracy', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('eval_mse', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│       eval_accuracy       │    0.5245398879051208     │
+│          eval_f1          │    0.6403712034225464     │
+│         eval_mse          │    0.10093403607606888    │
+│       eval_pearson        │   -0.06350009888410568    │
+│      eval_precision       │    0.6039387583732605     │
+│        eval_recall        │    0.6814814805984497     │
+│       eval_spearman       │    -0.0702221691608429    │
+│        train_loss         │    0.10093403607606888    │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 82/82 0:00:01 • 0:00:00 60.17it/s 
+Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]Loading weights: 100%|██████████| 391/391 [00:00<00:00, 31319.31it/s]
+[1mBertModel LOAD REPORT[0m from: intfloat/e5-large-v2
+Key                     | Status     |  | 
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Loading `train_dataloader` to estimate number of stepping batches.
+┏━━━┳━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┳━━━━━━━┓
+┃   ┃ Name      ┃ Type                ┃ Params ┃ Mode  ┃ FLOPs ┃
+┡━━━╇━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━╇━━━━━━━┩
+│ 0 │ model     │ SentenceTransformer │  335 M │ train │     0 │
+│ 1 │ f1_score  │ BinaryF1Score       │      0 │ train │     0 │
+│ 2 │ spearman  │ SpearmanCorrCoef    │      0 │ train │     0 │
+│ 3 │ pearson   │ PearsonCorrCoef     │      0 │ train │     0 │
+│ 4 │ precision │ BinaryPrecision     │      0 │ train │     0 │
+│ 5 │ recall    │ BinaryRecall        │      0 │ train │     0 │
+│ 6 │ mse       │ MeanSquaredError    │      0 │ train │     0 │
+│ 7 │ accuracy  │ BinaryAccuracy      │      0 │ train │     0 │
+└───┴───────────┴─────────────────────┴────────┴───────┴───────┘
+Trainable params: 335 M                                                         
+Non-trainable params: 0                                                         
+Total params: 335 M                                                             
+Total estimated model params size (MB): 1.3 K                                   
+Modules in train mode: 11                                                       
+Modules in eval mode: 444                                                       
+Total FLOPs: 0                                                                  
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/loops/fit_loop.py:534: Found 444 module(s) in eval mode at the start of training. This may lead to unexpected behavior during training. If this is intentional, you can ignore this warning.
+`Trainer.fit` stopped: `max_epochs=1` reached.
+Epoch 0/0  ━━━━━━━━━━━━━━━━━━━━ 303/303 0:00:20 • 0:00:00 15.03it/s v_num: 0.000
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│       eval_accuracy       │    0.6180981397628784     │
+│          eval_f1          │    0.7598842978477478     │
+│         eval_mse          │    0.08754774928092957    │
+│       eval_pearson        │   -0.02440776117146015    │
+│      eval_precision       │    0.6234177350997925     │
+│        eval_recall        │    0.9728395342826843     │
+│       eval_spearman       │   0.0007715176325291395   │
+│        train_loss         │    0.08754774928092957    │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 82/82 0:00:01 • 0:00:00 55.30it/s 
+W0330 15:12:22.430000 2071582 torch/utils/flop_counter.py:29] triton not found; flop counting will not work for triton kernels
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/torch/utils/data/dataloader.py:424: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 6, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  self.check_worker_number_rationality()
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 58104.18it/s]
+[1mMPNetModel LOAD REPORT[0m from: sentence-transformers/multi-qa-mpnet-base-dot-v1
+Key                     | Status     |  | 
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/torchmetrics/utilities/prints.py:43: UserWarning: Metric `SpearmanCorrcoef` will save all targets and predictions in the buffer. For large datasets, this may lead to large memory footprint.
+  warnings.warn(*args, **kwargs)
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/lightning_fabric/plugins/environments/slurm.py:204: The `srun` command is available on your system but is not used. HINT: If your intention is to run Lightning on SLURM, prepend your python command with `srun` like so: srun python storyBModel.py ...
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+Initializing distributed: GLOBAL_RANK: 0, MEMBER: 1/1
+----------------------------------------------------------------------------------------------------
+distributed_backend=nccl
+All distributed processes registered. Starting with 1 processes
+----------------------------------------------------------------------------------------------------
+
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Loading `train_dataloader` to estimate number of stepping batches.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/utilities/_pytree.py:21: `isinstance(treespec, LeafSpec)` is deprecated, use `isinstance(treespec, TreeSpec) and treespec.is_leaf()` instead.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/torch/utils/data/dataloader.py:432: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 6, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  self.check_worker_number_rationality()
+┏━━━┳━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┳━━━━━━━┓
+┃   ┃ Name      ┃ Type                ┃ Params ┃ Mode  ┃ FLOPs ┃
+┡━━━╇━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━╇━━━━━━━┩
+│ 0 │ model     │ SentenceTransformer │  109 M │ train │     0 │
+│ 1 │ mlp       │ EmpathyMLP          │  369 K │ train │     0 │
+│ 2 │ f1_score  │ BinaryF1Score       │      0 │ train │     0 │
+│ 3 │ spearman  │ SpearmanCorrCoef    │      0 │ train │     0 │
+│ 4 │ pearson   │ PearsonCorrCoef     │      0 │ train │     0 │
+│ 5 │ precision │ BinaryPrecision     │      0 │ train │     0 │
+│ 6 │ recall    │ BinaryRecall        │      0 │ train │     0 │
+│ 7 │ mse       │ MeanSquaredError    │      0 │ train │     0 │
+│ 8 │ accuracy  │ BinaryAccuracy      │      0 │ train │     0 │
+└───┴───────────┴─────────────────────┴────────┴───────┴───────┘
+Trainable params: 109 M                                                         
+Non-trainable params: 0                                                         
+Total params: 109 M                                                             
+Total estimated model params size (MB): 439                                     
+Modules in train mode: 18                                                       
+Modules in eval mode: 216                                                       
+Total FLOPs: 0                                                                  
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('val_loss', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('val_f1', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('val_spearman', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('val_pearson', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('val_precision', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('val_recall', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('val_accuracy', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('val_mse', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/loops/fit_loop.py:534: Found 216 module(s) in eval mode at the start of training. This may lead to unexpected behavior during training. If this is intentional, you can ignore this warning.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/torch/autograd/graph.py:869: UserWarning: The AccumulateGrad node's stream does not match the stream of the node that produced the incoming gradient. This may incur unnecessary synchronization and break CUDA graph capture if the AccumulateGrad node's stream is the default stream. This mismatch is caused by an AccumulateGrad node created prior to the current iteration being kept alive. This can happen if the autograd graph is still being kept alive by tensors such as the loss, or if you are using DDP, which will stash a reference to the node. To resolve the mismatch, delete all references to the autograd graph or ensure that DDP initialization is performed under the same stream as subsequent forwards. If the mismatch is intentional, you can use torch.autograd.graph.set_warn_on_accumulate_grad_stream_mismatch(False) to suppress this warning. (Triggered internally at /tmp/build_wheels_tmp.5682/python-3.11/torch/torch/csrc/autograd/input_buffer.cpp:240.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+`Trainer.fit` stopped: `max_epochs=1` reached.
+Epoch 0/0  ━━━━━━━━━━━━━━━━━━━━ 303/303 0:00:07 • 0:00:00 38.91it/s v_num: 0.000
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('eval_loss', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('eval_f1', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('eval_spearman', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('eval_pearson', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('eval_precision', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('eval_recall', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('eval_accuracy', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('eval_mse', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│       eval_accuracy       │    0.6211656332015991     │
+│          eval_f1          │     0.766319751739502     │
+│         eval_loss         │    0.08621829748153687    │
+│         eval_mse          │    0.08621829748153687    │
+│       eval_pearson        │    0.07042139768600464    │
+│      eval_precision       │    0.6211656332015991     │
+│        eval_recall        │            1.0            │
+│       eval_spearman       │    0.06990601122379303    │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 82/82 0:00:00 • 0:00:00 114.99it/s 
+W0330 15:12:54.249000 2072621 torch/utils/flop_counter.py:29] triton not found; flop counting will not work for triton kernels
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/torch/utils/data/dataloader.py:424: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 6, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  self.check_worker_number_rationality()
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 59213.00it/s]
+[1mMPNetModel LOAD REPORT[0m from: sentence-transformers/multi-qa-mpnet-base-dot-v1
+Key                     | Status     |  | 
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/torchmetrics/utilities/prints.py:43: UserWarning: Metric `SpearmanCorrcoef` will save all targets and predictions in the buffer. For large datasets, this may lead to large memory footprint.
+  warnings.warn(*args, **kwargs)
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/lightning_fabric/plugins/environments/slurm.py:204: The `srun` command is available on your system but is not used. HINT: If your intention is to run Lightning on SLURM, prepend your python command with `srun` like so: srun python ContextModel.py ...
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+Initializing distributed: GLOBAL_RANK: 0, MEMBER: 1/1
+----------------------------------------------------------------------------------------------------
+distributed_backend=nccl
+All distributed processes registered. Starting with 1 processes
+----------------------------------------------------------------------------------------------------
+
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Loading `train_dataloader` to estimate number of stepping batches.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/utilities/_pytree.py:21: `isinstance(treespec, LeafSpec)` is deprecated, use `isinstance(treespec, TreeSpec) and treespec.is_leaf()` instead.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/torch/utils/data/dataloader.py:432: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 6, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  self.check_worker_number_rationality()
+┏━━━┳━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┳━━━━━━━┓
+┃   ┃ Name      ┃ Type                ┃ Params ┃ Mode  ┃ FLOPs ┃
+┡━━━╇━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━╇━━━━━━━┩
+│ 0 │ model     │ SentenceTransformer │  109 M │ train │     0 │
+│ 1 │ mlp       │ EmpathyMLP          │  1.5 M │ train │     0 │
+│ 2 │ f1_score  │ BinaryF1Score       │      0 │ train │     0 │
+│ 3 │ spearman  │ SpearmanCorrCoef    │      0 │ train │     0 │
+│ 4 │ pearson   │ PearsonCorrCoef     │      0 │ train │     0 │
+│ 5 │ precision │ BinaryPrecision     │      0 │ train │     0 │
+│ 6 │ recall    │ BinaryRecall        │      0 │ train │     0 │
+│ 7 │ mse       │ MeanSquaredError    │      0 │ train │     0 │
+│ 8 │ accuracy  │ BinaryAccuracy      │      0 │ train │     0 │
+└───┴───────────┴─────────────────────┴────────┴───────┴───────┘
+Trainable params: 111 M                                                         
+Non-trainable params: 0                                                         
+Total params: 111 M                                                             
+Total estimated model params size (MB): 444                                     
+Modules in train mode: 20                                                       
+Modules in eval mode: 216                                                       
+Total FLOPs: 0                                                                  
+
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/scratch/rashadb/EmpathyPrediction_Replication/src/ContextModel.py", line 295, in <module>
+[rank0]:     trainer.fit(model=model,train_dataloaders=[train_dl], val_dataloaders = [val_dl])
+[rank0]:   File "/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/trainer.py", line 584, in fit
+[rank0]:     call._call_and_handle_interrupt(
+[rank0]:   File "/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/call.py", line 48, in _call_and_handle_interrupt
+[rank0]:     return trainer.strategy.launcher.launch(trainer_fn, *args, trainer=trainer, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/strategies/launchers/subprocess_script.py", line 105, in launch
+[rank0]:     return function(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/trainer.py", line 630, in _fit_impl
+[rank0]:     self._run(model, ckpt_path=ckpt_path, weights_only=weights_only)
+[rank0]:   File "/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/trainer.py", line 1079, in _run
+[rank0]:     results = self._run_stage()
+[rank0]:               ^^^^^^^^^^^^^^^^^
+[rank0]:   File "/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/trainer.py", line 1121, in _run_stage
+[rank0]:     self._run_sanity_check()
+[rank0]:   File "/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/trainer.py", line 1150, in _run_sanity_check
+[rank0]:     val_loop.run()
+[rank0]:   File "/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/loops/utilities.py", line 179, in _decorator
+[rank0]:     return loop_run(self, *args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/loops/evaluation_loop.py", line 146, in run
+[rank0]:     self._evaluation_step(batch, batch_idx, dataloader_idx, dataloader_iter)
+[rank0]:   File "/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/loops/evaluation_loop.py", line 441, in _evaluation_step
+[rank0]:     output = call._call_strategy_hook(trainer, hook_name, *step_args)
+[rank0]:              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/call.py", line 329, in _call_strategy_hook
+[rank0]:     output = fn(*args, **kwargs)
+[rank0]:              ^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/strategies/strategy.py", line 411, in validation_step
+[rank0]:     return self._forward_redirection(self.model, self.lightning_module, "validation_step", *args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/strategies/strategy.py", line 641, in __call__
+[rank0]:     wrapper_output = wrapper_module(*args, **kwargs)
+[rank0]:                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+[rank0]:     return self._call_impl(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+[rank0]:     return forward_call(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/torch/nn/parallel/distributed.py", line 1699, in forward
+[rank0]:     else self._run_ddp_forward(*inputs, **kwargs)
+[rank0]:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/torch/nn/parallel/distributed.py", line 1524, in _run_ddp_forward
+[rank0]:     return self.module(*inputs, **kwargs)  # type: ignore[index]
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+[rank0]:     return self._call_impl(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+[rank0]:     return forward_call(*args, **kwargs)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/strategies/strategy.py", line 634, in wrapped_forward
+[rank0]:     out = method(*_args, **_kwargs)
+[rank0]:           ^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/scratch/rashadb/EmpathyPrediction_Replication/src/ContextModel.py", line 245, in validation_step
+[rank0]:     r = self.eval_step(batch,batch_idx,prefix="val")
+[rank0]:         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/scratch/rashadb/EmpathyPrediction_Replication/src/ContextModel.py", line 152, in eval_step
+[rank0]:     full_A = place_A + "[SEP]" + why_A + "[SEP]" + story_A
+[rank0]:              ~~~~~~~~^~~~~~~~~
+[rank0]: TypeError: can only concatenate tuple (not "str") to tuple
+W0330 15:13:09.587000 2073060 torch/utils/flop_counter.py:29] triton not found; flop counting will not work for triton kernels
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/torch/utils/data/dataloader.py:424: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 6, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  self.check_worker_number_rationality()
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 11175.97it/s]
+[1mMPNetModel LOAD REPORT[0m from: sentence-transformers/multi-qa-mpnet-base-dot-v1
+Key                     | Status     |  | 
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/torchmetrics/utilities/prints.py:43: UserWarning: Metric `SpearmanCorrcoef` will save all targets and predictions in the buffer. For large datasets, this may lead to large memory footprint.
+  warnings.warn(*args, **kwargs)
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/lightning_fabric/plugins/environments/slurm.py:204: The `srun` command is available on your system but is not used. HINT: If your intention is to run Lightning on SLURM, prepend your python command with `srun` like so: srun python MultiDatasetTest.py ...
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+Initializing distributed: GLOBAL_RANK: 0, MEMBER: 1/1
+----------------------------------------------------------------------------------------------------
+distributed_backend=nccl
+All distributed processes registered. Starting with 1 processes
+----------------------------------------------------------------------------------------------------
+
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Loading `train_dataloader` to estimate number of stepping batches.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/utilities/_pytree.py:21: `isinstance(treespec, LeafSpec)` is deprecated, use `isinstance(treespec, TreeSpec) and treespec.is_leaf()` instead.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/torch/utils/data/dataloader.py:432: UserWarning: This DataLoader will create 16 worker processes in total. Our suggested max number of worker in current system is 6, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  self.check_worker_number_rationality()
+┏━━━┳━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┳━━━━━━━┓
+┃   ┃ Name      ┃ Type                ┃ Params ┃ Mode  ┃ FLOPs ┃
+┡━━━╇━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━╇━━━━━━━┩
+│ 0 │ model     │ SentenceTransformer │  109 M │ train │     0 │
+│ 1 │ mlp       │ EmpathyMLP          │  1.5 M │ train │     0 │
+│ 2 │ f1_score  │ BinaryF1Score       │      0 │ train │     0 │
+│ 3 │ spearman  │ SpearmanCorrCoef    │      0 │ train │     0 │
+│ 4 │ pearson   │ PearsonCorrCoef     │      0 │ train │     0 │
+│ 5 │ precision │ BinaryPrecision     │      0 │ train │     0 │
+│ 6 │ recall    │ BinaryRecall        │      0 │ train │     0 │
+│ 7 │ mse       │ MeanSquaredError    │      0 │ train │     0 │
+│ 8 │ accuracy  │ BinaryAccuracy      │      0 │ train │     0 │
+└───┴───────────┴─────────────────────┴────────┴───────┴───────┘
+Trainable params: 111 M                                                         
+Non-trainable params: 0                                                         
+Total params: 111 M                                                             
+Total estimated model params size (MB): 444                                     
+Modules in train mode: 20                                                       
+Modules in eval mode: 216                                                       
+Total FLOPs: 0                                                                  
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('val_loss', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('val_f1', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('val_spearman', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('val_pearson', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('val_precision', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('val_recall', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('val_accuracy', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('val_mse', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/loops/fit_loop.py:534: Found 216 module(s) in eval mode at the start of training. This may lead to unexpected behavior during training. If this is intentional, you can ignore this warning.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/torch/autograd/graph.py:869: UserWarning: The AccumulateGrad node's stream does not match the stream of the node that produced the incoming gradient. This may incur unnecessary synchronization and break CUDA graph capture if the AccumulateGrad node's stream is the default stream. This mismatch is caused by an AccumulateGrad node created prior to the current iteration being kept alive. This can happen if the autograd graph is still being kept alive by tensors such as the loss, or if you are using DDP, which will stash a reference to the node. To resolve the mismatch, delete all references to the autograd graph or ensure that DDP initialization is performed under the same stream as subsequent forwards. If the mismatch is intentional, you can use torch.autograd.graph.set_warn_on_accumulate_grad_stream_mismatch(False) to suppress this warning. (Triggered internally at /tmp/build_wheels_tmp.5682/python-3.11/torch/torch/csrc/autograd/input_buffer.cpp:240.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+`Trainer.fit` stopped: `max_epochs=1` reached.
+Epoch 0/0  ━━━━━━━━━━━━━━━━━━━━ 491/491 0:00:31 • 0:00:00 15.65it/s v_num: 0.000
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('eval_loss', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('eval_f1', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('eval_spearman', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('eval_pearson', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('eval_precision', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('eval_recall', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('eval_accuracy', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('eval_mse', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│       eval_accuracy       │    0.7233840227127075     │
+│          eval_f1          │    0.8394925594329834     │
+│         eval_loss         │    0.07283972948789597    │
+│         eval_mse          │    0.07283972948789597    │
+│       eval_pearson        │    0.19775697588920593    │
+│      eval_precision       │    0.7233840227127075     │
+│        eval_recall        │            1.0            │
+│       eval_spearman       │    0.15945103764533997    │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 132/132 0:00:02 • 0:00:00 50.74it/s 

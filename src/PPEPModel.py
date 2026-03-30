@@ -258,10 +258,10 @@ if __name__ == '__main__':
 
     # Work through loop for different epochs and different embedders
     embedders = ["SBERT", "e5"]
-    epochs = [1] # should be [100, 400]
+    epochs = [100,400] # should be [100, 400]
     for embedder in embedders:
         for epoch in epochs:
-            if embedder == "e5" and epoch != 1: # should be != 100
+            if embedder == "e5" and epoch != 100: # should be != 100
                 continue
 
             # Establish DataLoaders for training, validation, and testing

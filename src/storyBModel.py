@@ -252,7 +252,7 @@ if __name__ == '__main__':
     test_d = pd.read_csv(test_path)
 
     # Work through loop for different epochs and different embedders
-    epochs = [1] # should be 400
+    epochs = [400] # should be 400
     for epoch in epochs:
         # Establish DataLoaders for training, validation, and testing
         train_ds = EFPDataset(train_d)
