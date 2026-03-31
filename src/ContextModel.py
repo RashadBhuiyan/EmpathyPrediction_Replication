@@ -20,7 +20,7 @@ from torch.utils.data import DataLoader
 from torchmetrics import SpearmanCorrCoef, F1Score, PearsonCorrCoef, Precision, Recall, MeanSquaredError, Accuracy
 from transformers import get_linear_schedule_with_warmup
 from sentence_transformers import SentenceTransformer
-from DatasetList import EFPDataset
+from DatasetList import ContextDataset
 import config as cfg
 
 # config and paths
@@ -110,21 +110,13 @@ class ContextModel(pl.LightningModule):
     def training_step(self, batch, batch_idx):
         # get batch information
         batch = batch[0]
-        place_A = batch[0]
-        why_A = batch[1]
-        story_A = batch[2]
-        place_B = batch[3]
-        why_B = batch[4]
-        story_B = batch[5]
-        empathy_score = batch[6]
-
-        # combine the two parts to make two full stories
-        full_A = place_A + "[SEP]" + why_A + "[SEP]" + story_A
-        full_B = place_B + "[SEP]" + why_B + "[SEP]" + story_B
+        context_A = batch[0]
+        context_B = batch[1]
+        empathy_score = batch[2]
 
         # use embeddings for MLP
-        storyA_emb = self(full_A)
-        storyB_emb = self(full_B)
+        storyA_emb = self(context_A)
+        storyB_emb = self(context_B)
         
         # Concatenate embeddings and pass through MLP
         concatenated = torch.cat([storyA_emb, storyB_emb], dim=1)
@@ -139,22 +131,14 @@ class ContextModel(pl.LightningModule):
 
     def eval_step(self,batch,batch_idx,prefix):
         # get batch information
-        batch = batch[0]
-        place_A = batch[0]
-        why_A = batch[1]
-        story_A = batch[2]
-        place_B = batch[3]
-        why_B = batch[4]
-        story_B = batch[5]
-        empathy_score = batch[6]
-
-        # combine the two parts to make two full stories
-        full_A = place_A + "[SEP]" + why_A + "[SEP]" + story_A
-        full_B = place_B + "[SEP]" + why_B + "[SEP]" + story_B
+        # batch = batch[0]
+        context_A = batch[0]
+        context_B = batch[1]
+        empathy_score = batch[2]
 
         # use embeddings for MLP
-        storyA_emb = self(full_A)
-        storyB_emb = self(full_B)
+        storyA_emb = self(context_A)
+        storyB_emb = self(context_B)
         
         # Concatenate embeddings and pass through MLP
         concatenated = torch.cat([storyA_emb, storyB_emb], dim=1)
@@ -268,11 +252,11 @@ if __name__ == '__main__':
     epochs = [100] # should be [100]
     for epoch in epochs:
         # Establish DataLoaders for training, validation, and testing
-        train_ds = EFPDataset(train_d)
+        train_ds = ContextDataset(train_d)
         train_dl = DataLoader(train_ds, batch_size=8, shuffle=True, num_workers=16)
-        val_ds = EFPDataset(val_d)
+        val_ds = ContextDataset(val_d)
         val_dl = DataLoader(val_ds, batch_size=8, shuffle=False, num_workers=16)
-        test_ds = EFPDataset(test_d)
+        test_ds = ContextDataset(test_d)
         test_dl = DataLoader(test_ds, batch_size=8, shuffle=False, num_workers=16)
 
         # Establish callbacks and logger

@@ -29,6 +29,32 @@ class EFPDataset(torch.utils.data.Dataset):
         if self.limit!=-1:
             return self.limit
         return len(self.data)
+    
+class ContextDataset(torch.utils.data.Dataset):
+    def __init__(self, data, limit=-1):
+        self.data = data
+        self.limit = limit
+
+    def __getitem__(self, idx):
+        i = self.data.iloc[idx]
+        place_A = i["place_A"]
+        place_B = i["place_B"]
+        why_A = i["why_A"]
+        why_B = i["why_B"]
+        story_A = i["story_A"]
+        story_B = i["story_B"]
+
+        # combine relevant contexts
+        context_A = place_A + "[SEP]" + why_A + "[SEP]" + story_A
+        context_B = place_B + "[SEP]" + why_B + "[SEP]" + story_B
+        empathy_score = i["empathy"] / 100.0
+
+        return [context_A, context_B, empathy_score]
+
+    def __len__(self):
+        if self.limit!=-1:
+            return self.limit
+        return len(self.data)
 
 class ESDataset(torch.utils.data.Dataset):
     def __init__(self, data, limit=-1):
