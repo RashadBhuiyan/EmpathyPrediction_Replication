@@ -2,7 +2,7 @@
 #SBATCH --account=def-cfwelch
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=96G
-#SBATCH --time=5:59:00
+#SBATCH --time=8:59:00
 #SBATCH --gres=gpu:h100:1
 #SBATCH --mail-user=bhuiyr2@mcmaster.ca
 #SBATCH --mail-type=BEGIN,END
@@ -16,8 +16,8 @@ module load cudnn/9.2.1.18
 module load arrow/18.1.0
 
 source ../env/bin/activate
-python PPEPModel.py
-python CosineSimilarityModel.py
-python storyBModel.py
-python ContextModel.py
-python MultiDatasetTest.py
+srun python PPEPModel.py
+srun python CosineSimilarityModel.py
+srun python storyBModel.py
+srun python ContextModel.py
+srun python MultiDatasetTest.py

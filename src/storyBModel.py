@@ -185,13 +185,13 @@ class StoryBModel(pl.LightningModule):
         accuracy = self.accuracy.compute()
         mse = self.mse.compute()
 
-        self.log(prefix+"_f1", f1)
-        self.log(prefix+"_spearman", spearman)
-        self.log(prefix+"_pearson", pearson)
-        self.log(prefix+"_precision", precision)
-        self.log(prefix+"_recall", recall)
-        self.log(prefix+"_accuracy", accuracy)
-        self.log(prefix+"_mse", mse)
+        self.log(prefix+"_f1", f1, sync_dist=True)
+        self.log(prefix+"_spearman", spearman, sync_dist=True)
+        self.log(prefix+"_pearson", pearson, sync_dist=True)
+        self.log(prefix+"_precision", precision, sync_dist=True)
+        self.log(prefix+"_recall", recall, sync_dist=True)
+        self.log(prefix+"_accuracy", accuracy, sync_dist=True)
+        self.log(prefix+"_mse", mse, sync_dist=True)
         
         # Reset metrics for next epoch
         self.f1_score.reset()
