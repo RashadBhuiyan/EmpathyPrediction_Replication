@@ -1,0 +1,22 @@
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/torch/cuda/__init__.py:827: UserWarning: Can't initialize NVML
+  warnings.warn("Can't initialize NVML")
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/torchmetrics/utilities/prints.py:43: UserWarning: Metric `SpearmanCorrcoef` will save all targets and predictions in the buffer. For large datasets, this may lead to large memory footprint.
+  warnings.warn(*args, **kwargs)
+LLM Metrics Results for Qwen2.5-72B-Instruct:
+Zero Shot Results:
+Spearman Correlation: 0.0037461707834154367
+Pearson Correlation: -0.013258547522127628
+Mean Squared Error: 0.13673359155654907
+Accuracy: 0.4110429584980011
+F1 Score: 0.29927006363868713
+Precision: 0.5734265446662903
+Recall: 0.202469140291214
+
+Five Shot Results:
+Spearman Correlation: -0.021304290741682053
+Pearson Correlation: -0.01594480313360691
+Mean Squared Error: 0.13722483813762665
+Accuracy: 0.44631901383399963
+F1 Score: 0.44375962018966675
+Precision: 0.5901639461517334
+Recall: 0.35555556416511536

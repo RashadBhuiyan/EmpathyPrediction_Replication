@@ -8,10 +8,8 @@ import os
 import pandas as pd
 import csv
 from dotenv import load_dotenv, find_dotenv
-from torchmetrics import SpearmanCorrCoef, F1Score, PearsonCorrCoef, Precision, Recall, MeanSquaredError, Accuracy
 import config as cfg
 import torch
-from transformers import AutoTokenizer, AutoModelForCausalLM, GenerationConfig
 from transformers import pipeline
 
 # Set environment variables for Hugging Face cache and token
@@ -110,8 +108,6 @@ if __name__ == '__main__':
 
             del zero_message, five_shot_prompt_message, zero_output, five_shot_output
             torch.cuda.empty_cache()
-
-            # Calculate torch metrics for zero-shot prompting
 
             # save results to CSV in logs/LLMPrompt (under file LLMPrompt_results.csv) with columns: model_name, story_A, story_B, empathy_score, predicted_empathy_score
             output_headers = ["model_name", "story_A", "story_B", "empathy_score", "zero_shot_result", "five_shot_result"]
