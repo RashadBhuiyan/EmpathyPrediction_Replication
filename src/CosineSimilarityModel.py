@@ -242,11 +242,11 @@ if __name__ == '__main__':
             # Establish callbacks and logger
             lr_monitor = LearningRateMonitor(logging_interval='step')
             spearman_callback = ModelCheckpoint(save_top_k=1, monitor="val_spearman", mode="max")
-            logger = CSVLogger(save_dir="logs", name=f"cosine_similarity_model_{embedder}_{epoch}")
+            logger = CSVLogger(save_dir="logs", name=f"cosine_similarity_model_{embedder}_{epoch}_MEANPOOLING")
             precision = 32
 
             # Build model and trainer
-            model = CosineSimilarityModel(model=embedder)
+            model = CosineSimilarityModel(model=embedder, pooling="MEAN")
             trainer = pl.Trainer(
                 log_every_n_steps=5,
                 max_epochs=int(epoch), 
