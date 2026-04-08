@@ -8,6 +8,7 @@
 # MSE loss between predicted empathy and human empathy ratings (both ranging 0 to 1) was used
 # validation loss was used to select the best-performing model
 
+import argparse
 import gc
 import os
 import pandas as pd
@@ -219,6 +220,11 @@ class CosineSimilarityModel(pl.LightningModule):
         return [optimizer], [scheduler]
     
 if __name__ == '__main__':
+    # get arguments from command line
+    parser = argparse.ArgumentParser(description='Determine pooling mechanism')
+    parser.add_argument("-p", "--pooling", help="Pooling mechanism to use (CLS or MEAN)", type=str, default="CLS")
+    args = parser.parse_args()
+    
     train_d = pd.read_csv(train_path)
     val_d = pd.read_csv(val_path)
     test_d = pd.read_csv(test_path)
@@ -242,11 +248,11 @@ if __name__ == '__main__':
             # Establish callbacks and logger
             lr_monitor = LearningRateMonitor(logging_interval='step')
             spearman_callback = ModelCheckpoint(save_top_k=1, monitor="val_spearman", mode="max")
-            logger = CSVLogger(save_dir="logs", name=f"cosine_similarity_model_{embedder}_{epoch}_MEANPOOLING")
+            logger = CSVLogger(save_dir="logs", name=f"cosine_similarity_model_{embedder}_{epoch}_{args.pooling}")
             precision = 32
 
             # Build model and trainer
-            model = CosineSimilarityModel(model=embedder, pooling="MEAN")
+            model = CosineSimilarityModel(model=embedder, pooling=args.pooling)
             trainer = pl.Trainer(
                 log_every_n_steps=5,
                 max_epochs=int(epoch), 

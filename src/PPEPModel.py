@@ -5,6 +5,7 @@
 # 3. classifier with 2nd embeddings (ie. demographics or place and why) replaces with a 4-layer MLP with layer dimensions of 1536, 768, 384, 192, followed by a sigmoid --> CANNOT DO AS THERE IS NO DEMOGRAPHIC INFORMATION PROVIDED AS PART OF THE DATASET
 # 4. experiment s with e5 (embedding size of 1024), MLP input dimension is changes to 1024*2 and layer dimensions are 1024,512,192 followed by a sigmoid
 
+import argparse
 import gc
 import os
 import pandas as pd
@@ -252,6 +253,11 @@ class PPEPModel(pl.LightningModule):
         return [optimizer], [scheduler]
     
 if __name__ == '__main__':
+    # get arguments from command line
+    parser = argparse.ArgumentParser(description='Determine pooling mechanism')
+    parser.add_argument("-p", "--pooling", help="Pooling mechanism to use (CLS or MEAN)", type=str, default="CLS")
+    args = parser.parse_args()
+    
     train_d = pd.read_csv(train_path)
     val_d = pd.read_csv(val_path)
     test_d = pd.read_csv(test_path)
@@ -275,14 +281,14 @@ if __name__ == '__main__':
             # Establish callbacks and logger
             lr_monitor = LearningRateMonitor(logging_interval='step')
             spearman_callback = ModelCheckpoint(save_top_k=1, monitor="val_spearman", mode="max")
-            logger = CSVLogger(save_dir="logs", name=f"ppep_model_{embedder}_{epoch}_MEANPOOLING")
+            logger = CSVLogger(save_dir="logs", name=f"ppep_model_{embedder}_{epoch}_{args.pooling}")
             precision = 32
 
             # Build model and trainer
             if embedder == "e5":
-                model = PPEPModel(model=embedder, input_dim=2048, hidden_dims=[1024, 512, 192], pooling="MEAN")
+                model = PPEPModel(model=embedder, input_dim=2048, hidden_dims=[1024, 512, 192], pooling=args.pooling)
             else:
-                model = PPEPModel(model=embedder, pooling="MEAN")
+                model = PPEPModel(model=embedder, pooling=args.pooling)
             trainer = pl.Trainer(
                 log_every_n_steps=5,
                 max_epochs=int(epoch), 

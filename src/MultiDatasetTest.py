@@ -1,3 +1,4 @@
+import argparse
 import os
 import pandas as pd
 import gc
@@ -31,6 +32,11 @@ es_val_path = os.path.join(parent_dir, DATA_DIR, ES_VAL)
 torch.set_float32_matmul_precision('high')
 
 if __name__ == '__main__':
+    # get arguments from command line
+    parser = argparse.ArgumentParser(description='Determine pooling mechanism')
+    parser.add_argument("-p", "--pooling", help="Pooling mechanism to use (CLS or MEAN)", type=str, default="CLS")
+    args = parser.parse_args()
+    
     efp_train_d = pd.read_csv(efp_train_path)
     es_train_d = pd.read_csv(es_train_path)
     efp_val_d = pd.read_csv(efp_val_path)
@@ -58,11 +64,11 @@ if __name__ == '__main__':
         # Establish callbacks and logger
         lr_monitor = LearningRateMonitor(logging_interval='step')
         spearman_callback = ModelCheckpoint(save_top_k=1, monitor="val_spearman", mode="max")
-        logger = CSVLogger(save_dir="logs", name=f"ppep_model_EFP_ES_{epoch}_MEANPOOLING")
+        logger = CSVLogger(save_dir="logs", name=f"ppep_model_EFP_ES_{epoch}_{args.pooling}")
         precision = 32
 
         # Build model and trainer
-        model = PPEPModel(pooling="MEAN")
+        model = PPEPModel(pooling=args.pooling)
         trainer = pl.Trainer(
             log_every_n_steps=5,
             max_epochs=int(epoch), 

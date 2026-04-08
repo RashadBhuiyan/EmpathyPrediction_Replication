@@ -2,6 +2,7 @@
 # all of the following model updates are for unique model variants, not cumulative updates to the same model
 # 2. storyB only classifier replaces with 2-layer MLP with input dimension of 768 and layer dimensions of 384 and 192, followed by a sigmoid
 
+import argparse
 import gc
 import os
 import pandas as pd
@@ -247,6 +248,11 @@ class StoryBModel(pl.LightningModule):
         return [optimizer], [scheduler]
     
 if __name__ == '__main__':
+    # get arguments from command line
+    parser = argparse.ArgumentParser(description='Determine pooling mechanism')
+    parser.add_argument("-p", "--pooling", help="Pooling mechanism to use (CLS or MEAN)", type=str, default="CLS")
+    args = parser.parse_args()
+    
     train_d = pd.read_csv(train_path)
     val_d = pd.read_csv(val_path)
     test_d = pd.read_csv(test_path)
@@ -265,11 +271,11 @@ if __name__ == '__main__':
         # Establish callbacks and logger
         lr_monitor = LearningRateMonitor(logging_interval='step')
         spearman_callback = ModelCheckpoint(save_top_k=1, monitor="val_spearman", mode="max")
-        logger = CSVLogger(save_dir="logs", name=f"storyB_model_{epoch}_MEANPOOLING")
+        logger = CSVLogger(save_dir="logs", name=f"storyB_model_{epoch}_{args.pooling}")
         precision = 32
 
         # Build model and trainer
-        model = StoryBModel(pooling="MEAN")
+        model = StoryBModel(pooling=args.pooling)
         trainer = pl.Trainer(
             log_every_n_steps=5,
             max_epochs=int(epoch), 
