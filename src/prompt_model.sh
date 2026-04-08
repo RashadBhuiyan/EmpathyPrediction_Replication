@@ -1,9 +1,9 @@
 #!/bin/bash
 #SBATCH --account=def-cfwelch
 #SBATCH --cpus-per-task=16
-#SBATCH --mem=400G
+#SBATCH --mem=800G
 #SBATCH --time=3:59:00
-#SBATCH --gres=gpu:h100:2
+#SBATCH --gres=gpu:h100:4
 #SBATCH --mail-user=bhuiyr2@mcmaster.ca
 #SBATCH --mail-type=BEGIN,END
 #SBATCH --output=logs/slurm/llm_results.out

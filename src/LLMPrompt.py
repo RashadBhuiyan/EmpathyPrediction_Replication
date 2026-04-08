@@ -25,7 +25,7 @@ parent_dir = os.path.abspath(os.path.join(os.getcwd(), os.pardir))
 output_path = os.path.join(parent_dir, "src", "logs", "LLMPrompt_results.csv")
 efp_train_path = os.path.join(parent_dir, DATA_DIR, EFP_TRAIN)
 efp_test_path = os.path.join(parent_dir, DATA_DIR, EFP_TEST)
-model_list = ["Qwen/Qwen2.5-72B-Instruct"] # "deepseek-ai/DeepSeek-V2-Chat", "meta-llama/Llama-3.3-70B-Instruct", "Qwen/Qwen2.5-72B-Instruct"
+model_list = ["deepseek-ai/DeepSeek-V2-Chat", "Qwen/Qwen2.5-72B-Instruct"] # "deepseek-ai/DeepSeek-V2-Chat", "meta-llama/Llama-3.3-70B-Instruct", "Qwen/Qwen2.5-72B-Instruct"
 initial_prompt = "You are a psychologist with expertise in analyzing empathy. You can predict how much people might empathize with each other, based on their past experiences. You will receive two stories, one from person A and the other from person B."
 
 # load environment variables from local .env file
