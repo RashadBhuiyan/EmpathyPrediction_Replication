@@ -1,0 +1,1147 @@
+Starting run 2
+Running all models with pooling mechanism: CLS
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 9849.97it/s]
+[1mMPNetModel LOAD REPORT[0m from: sentence-transformers/multi-qa-mpnet-base-dot-v1
+Key                     | Status     |  | 
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/torchmetrics/utilities/prints.py:43: UserWarning: Metric `SpearmanCorrcoef` will save all targets and predictions in the buffer. For large datasets, this may lead to large memory footprint.
+  warnings.warn(*args, **kwargs)
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+Initializing distributed: GLOBAL_RANK: 0, MEMBER: 1/1
+----------------------------------------------------------------------------------------------------
+distributed_backend=nccl
+All distributed processes registered. Starting with 1 processes
+----------------------------------------------------------------------------------------------------
+
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+Loading `train_dataloader` to estimate number of stepping batches.
+┏━━━┳━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┳━━━━━━━┓
+┃   ┃ Name      ┃ Type                ┃ Params ┃ Mode  ┃ FLOPs ┃
+┡━━━╇━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━╇━━━━━━━┩
+│ 0 │ model     │ SentenceTransformer │  109 M │ train │     0 │
+│ 1 │ mlp       │ EmpathyMLP          │  1.5 M │ train │     0 │
+│ 2 │ f1_score  │ BinaryF1Score       │      0 │ train │     0 │
+│ 3 │ spearman  │ SpearmanCorrCoef    │      0 │ train │     0 │
+│ 4 │ pearson   │ PearsonCorrCoef     │      0 │ train │     0 │
+│ 5 │ precision │ BinaryPrecision     │      0 │ train │     0 │
+│ 6 │ recall    │ BinaryRecall        │      0 │ train │     0 │
+│ 7 │ mse       │ MeanSquaredError    │      0 │ train │     0 │
+│ 8 │ accuracy  │ BinaryAccuracy      │      0 │ train │     0 │
+└───┴───────────┴─────────────────────┴────────┴───────┴───────┘
+Trainable params: 111 M                                                         
+Non-trainable params: 0                                                         
+Total params: 111 M                                                             
+Total estimated model params size (MB): 444                                     
+Modules in train mode: 20                                                       
+Modules in eval mode: 216                                                       
+Total FLOPs: 0                                                                  
+SLURM auto-requeueing enabled. Setting signal handlers.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('val_loss', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/loops/fit_loop.py:534: Found 216 module(s) in eval mode at the start of training. This may lead to unexpected behavior during training. If this is intentional, you can ignore this warning.
+`Trainer.fit` stopped: `max_epochs=100` reached.
+Epoch 99/99 ━━━━━━━━━━━━━━━━━━━ 152/152 0:00:06 • 0:00:00 26.33it/s v_num: 1.000
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+SLURM auto-requeueing enabled. Setting signal handlers.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:217: Using `DistributedSampler` with the dataloaders. During `trainer.test()`, it is recommended to use `Trainer(devices=1, num_nodes=1)` to ensure each sample/batch gets evaluated exactly once. Otherwise, multi-device settings use `DistributedSampler` that replicates some samples to make sure all devices have same batch size in case of uneven inputs.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('eval_loss', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│       eval_accuracy       │    0.6656441688537598     │
+│          eval_f1          │    0.7212276458740234     │
+│         eval_loss         │    0.07773596793413162    │
+│         eval_mse          │    0.07773596793413162    │
+│       eval_pearson        │    0.4036687910556793     │
+│      eval_precision       │    0.7382199168205261     │
+│        eval_recall        │    0.7049999833106995     │
+│       eval_spearman       │    0.4129146337509155     │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 41/41 0:00:00 • 0:00:00 71.83it/s 
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 9831.06it/s]
+[1mMPNetModel LOAD REPORT[0m from: sentence-transformers/multi-qa-mpnet-base-dot-v1
+Key                     | Status     |  | 
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+Loading `train_dataloader` to estimate number of stepping batches.
+┏━━━┳━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┳━━━━━━━┓
+┃   ┃ Name      ┃ Type                ┃ Params ┃ Mode  ┃ FLOPs ┃
+┡━━━╇━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━╇━━━━━━━┩
+│ 0 │ model     │ SentenceTransformer │  109 M │ train │     0 │
+│ 1 │ mlp       │ EmpathyMLP          │  1.5 M │ train │     0 │
+│ 2 │ f1_score  │ BinaryF1Score       │      0 │ train │     0 │
+│ 3 │ spearman  │ SpearmanCorrCoef    │      0 │ train │     0 │
+│ 4 │ pearson   │ PearsonCorrCoef     │      0 │ train │     0 │
+│ 5 │ precision │ BinaryPrecision     │      0 │ train │     0 │
+│ 6 │ recall    │ BinaryRecall        │      0 │ train │     0 │
+│ 7 │ mse       │ MeanSquaredError    │      0 │ train │     0 │
+│ 8 │ accuracy  │ BinaryAccuracy      │      0 │ train │     0 │
+└───┴───────────┴─────────────────────┴────────┴───────┴───────┘
+Trainable params: 111 M                                                         
+Non-trainable params: 0                                                         
+Total params: 111 M                                                             
+Total estimated model params size (MB): 444                                     
+Modules in train mode: 20                                                       
+Modules in eval mode: 216                                                       
+Total FLOPs: 0                                                                  
+SLURM auto-requeueing enabled. Setting signal handlers.
+`Trainer.fit` stopped: `max_epochs=400` reached.
+Epoch 399/399 ━━━━━━━━━━━━━━━━━ 152/152 0:00:06 • 0:00:00 25.09it/s v_num: 1.000
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+SLURM auto-requeueing enabled. Setting signal handlers.
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│       eval_accuracy       │    0.6687116622924805     │
+│          eval_f1          │    0.7326732873916626     │
+│         eval_loss         │    0.08742167800664902    │
+│         eval_mse          │    0.08742167800664902    │
+│       eval_pearson        │    0.38711047172546387    │
+│      eval_precision       │    0.7254902124404907     │
+│        eval_recall        │    0.7400000095367432     │
+│       eval_spearman       │    0.3865727186203003     │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 41/41 0:00:00 • 0:00:00 70.55it/s 
+Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]Loading weights: 100%|██████████| 391/391 [00:00<00:00, 11060.79it/s]
+[1mBertModel LOAD REPORT[0m from: intfloat/e5-large-v2
+Key                     | Status     |  | 
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+Loading `train_dataloader` to estimate number of stepping batches.
+┏━━━┳━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┳━━━━━━━┓
+┃   ┃ Name      ┃ Type                ┃ Params ┃ Mode  ┃ FLOPs ┃
+┡━━━╇━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━╇━━━━━━━┩
+│ 0 │ model     │ SentenceTransformer │  335 M │ train │     0 │
+│ 1 │ mlp       │ EmpathyMLP          │  2.7 M │ train │     0 │
+│ 2 │ f1_score  │ BinaryF1Score       │      0 │ train │     0 │
+│ 3 │ spearman  │ SpearmanCorrCoef    │      0 │ train │     0 │
+│ 4 │ pearson   │ PearsonCorrCoef     │      0 │ train │     0 │
+│ 5 │ precision │ BinaryPrecision     │      0 │ train │     0 │
+│ 6 │ recall    │ BinaryRecall        │      0 │ train │     0 │
+│ 7 │ mse       │ MeanSquaredError    │      0 │ train │     0 │
+│ 8 │ accuracy  │ BinaryAccuracy      │      0 │ train │     0 │
+└───┴───────────┴─────────────────────┴────────┴───────┴───────┘
+Trainable params: 337 M                                                         
+Non-trainable params: 0                                                         
+Total params: 337 M                                                             
+Total estimated model params size (MB): 1.4 K                                   
+Modules in train mode: 21                                                       
+Modules in eval mode: 444                                                       
+Total FLOPs: 0                                                                  
+SLURM auto-requeueing enabled. Setting signal handlers.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/loops/fit_loop.py:534: Found 444 module(s) in eval mode at the start of training. This may lead to unexpected behavior during training. If this is intentional, you can ignore this warning.
+`Trainer.fit` stopped: `max_epochs=100` reached.
+Epoch 99/99 ━━━━━━━━━━━━━━━━━━━ 152/152 0:00:10 • 0:00:00 14.62it/s v_num: 1.000
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+SLURM auto-requeueing enabled. Setting signal handlers.
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│       eval_accuracy       │     0.650306761264801     │
+│          eval_f1          │    0.7149999737739563     │
+│         eval_loss         │    0.08209279179573059    │
+│         eval_mse          │    0.08209279179573059    │
+│       eval_pearson        │    0.3971481919288635     │
+│      eval_precision       │    0.7149999737739563     │
+│        eval_recall        │    0.7149999737739563     │
+│       eval_spearman       │    0.39999186992645264    │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 41/41 0:00:00 • 0:00:00 48.59it/s 
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 11765.64it/s]
+[1mMPNetModel LOAD REPORT[0m from: sentence-transformers/multi-qa-mpnet-base-dot-v1
+Key                     | Status     |  | 
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/torchmetrics/utilities/prints.py:43: UserWarning: Metric `SpearmanCorrcoef` will save all targets and predictions in the buffer. For large datasets, this may lead to large memory footprint.
+  warnings.warn(*args, **kwargs)
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+Initializing distributed: GLOBAL_RANK: 0, MEMBER: 1/1
+----------------------------------------------------------------------------------------------------
+distributed_backend=nccl
+All distributed processes registered. Starting with 1 processes
+----------------------------------------------------------------------------------------------------
+
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+Loading `train_dataloader` to estimate number of stepping batches.
+┏━━━┳━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┳━━━━━━━┓
+┃   ┃ Name      ┃ Type                ┃ Params ┃ Mode  ┃ FLOPs ┃
+┡━━━╇━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━╇━━━━━━━┩
+│ 0 │ model     │ SentenceTransformer │  109 M │ train │     0 │
+│ 1 │ f1_score  │ BinaryF1Score       │      0 │ train │     0 │
+│ 2 │ spearman  │ SpearmanCorrCoef    │      0 │ train │     0 │
+│ 3 │ pearson   │ PearsonCorrCoef     │      0 │ train │     0 │
+│ 4 │ precision │ BinaryPrecision     │      0 │ train │     0 │
+│ 5 │ recall    │ BinaryRecall        │      0 │ train │     0 │
+│ 6 │ mse       │ MeanSquaredError    │      0 │ train │     0 │
+│ 7 │ accuracy  │ BinaryAccuracy      │      0 │ train │     0 │
+└───┴───────────┴─────────────────────┴────────┴───────┴───────┘
+Trainable params: 109 M                                                         
+Non-trainable params: 0                                                         
+Total params: 109 M                                                             
+Total estimated model params size (MB): 437                                     
+Modules in train mode: 10                                                       
+Modules in eval mode: 216                                                       
+Total FLOPs: 0                                                                  
+SLURM auto-requeueing enabled. Setting signal handlers.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('train_loss', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/loops/fit_loop.py:534: Found 216 module(s) in eval mode at the start of training. This may lead to unexpected behavior during training. If this is intentional, you can ignore this warning.
+`Trainer.fit` stopped: `max_epochs=50` reached.
+Epoch 49/49 ━━━━━━━━━━━━━━━━━━━ 152/152 0:00:05 • 0:00:00 26.76it/s v_num: 2.000
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+SLURM auto-requeueing enabled. Setting signal handlers.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:217: Using `DistributedSampler` with the dataloaders. During `trainer.test()`, it is recommended to use `Trainer(devices=1, num_nodes=1)` to ensure each sample/batch gets evaluated exactly once. Otherwise, multi-device settings use `DistributedSampler` that replicates some samples to make sure all devices have same batch size in case of uneven inputs.
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│       eval_accuracy       │    0.6196318864822388     │
+│          eval_f1          │    0.6990291476249695     │
+│         eval_mse          │    0.0830010399222374     │
+│       eval_pearson        │    0.23884448409080505    │
+│      eval_precision       │    0.6792452931404114     │
+│        eval_recall        │    0.7200000286102295     │
+│       eval_spearman       │    0.25199511647224426    │
+│        train_loss         │    0.0830010399222374     │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 41/41 0:00:00 • 0:00:00 72.29it/s 
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 11172.53it/s]
+[1mMPNetModel LOAD REPORT[0m from: sentence-transformers/multi-qa-mpnet-base-dot-v1
+Key                     | Status     |  | 
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+Loading `train_dataloader` to estimate number of stepping batches.
+┏━━━┳━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┳━━━━━━━┓
+┃   ┃ Name      ┃ Type                ┃ Params ┃ Mode  ┃ FLOPs ┃
+┡━━━╇━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━╇━━━━━━━┩
+│ 0 │ model     │ SentenceTransformer │  109 M │ train │     0 │
+│ 1 │ f1_score  │ BinaryF1Score       │      0 │ train │     0 │
+│ 2 │ spearman  │ SpearmanCorrCoef    │      0 │ train │     0 │
+│ 3 │ pearson   │ PearsonCorrCoef     │      0 │ train │     0 │
+│ 4 │ precision │ BinaryPrecision     │      0 │ train │     0 │
+│ 5 │ recall    │ BinaryRecall        │      0 │ train │     0 │
+│ 6 │ mse       │ MeanSquaredError    │      0 │ train │     0 │
+│ 7 │ accuracy  │ BinaryAccuracy      │      0 │ train │     0 │
+└───┴───────────┴─────────────────────┴────────┴───────┴───────┘
+Trainable params: 109 M                                                         
+Non-trainable params: 0                                                         
+Total params: 109 M                                                             
+Total estimated model params size (MB): 437                                     
+Modules in train mode: 10                                                       
+Modules in eval mode: 216                                                       
+Total FLOPs: 0                                                                  
+SLURM auto-requeueing enabled. Setting signal handlers.
+`Trainer.fit` stopped: `max_epochs=100` reached.
+Epoch 99/99 ━━━━━━━━━━━━━━━━━━━ 152/152 0:00:06 • 0:00:00 26.51it/s v_num: 2.000
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+SLURM auto-requeueing enabled. Setting signal handlers.
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│       eval_accuracy       │    0.6748466491699219     │
+│          eval_f1          │    0.7401960492134094     │
+│         eval_mse          │    0.0789920911192894     │
+│       eval_pearson        │    0.3559739291667938     │
+│      eval_precision       │    0.7259615659713745     │
+│        eval_recall        │    0.7549999952316284     │
+│       eval_spearman       │    0.37069451808929443    │
+│        train_loss         │    0.0789920911192894     │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 41/41 0:00:00 • 0:00:00 68.48it/s 
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 8346.50it/s]
+[1mMPNetModel LOAD REPORT[0m from: sentence-transformers/multi-qa-mpnet-base-dot-v1
+Key                     | Status     |  | 
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+Loading `train_dataloader` to estimate number of stepping batches.
+┏━━━┳━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┳━━━━━━━┓
+┃   ┃ Name      ┃ Type                ┃ Params ┃ Mode  ┃ FLOPs ┃
+┡━━━╇━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━╇━━━━━━━┩
+│ 0 │ model     │ SentenceTransformer │  109 M │ train │     0 │
+│ 1 │ f1_score  │ BinaryF1Score       │      0 │ train │     0 │
+│ 2 │ spearman  │ SpearmanCorrCoef    │      0 │ train │     0 │
+│ 3 │ pearson   │ PearsonCorrCoef     │      0 │ train │     0 │
+│ 4 │ precision │ BinaryPrecision     │      0 │ train │     0 │
+│ 5 │ recall    │ BinaryRecall        │      0 │ train │     0 │
+│ 6 │ mse       │ MeanSquaredError    │      0 │ train │     0 │
+│ 7 │ accuracy  │ BinaryAccuracy      │      0 │ train │     0 │
+└───┴───────────┴─────────────────────┴────────┴───────┴───────┘
+Trainable params: 109 M                                                         
+Non-trainable params: 0                                                         
+Total params: 109 M                                                             
+Total estimated model params size (MB): 437                                     
+Modules in train mode: 10                                                       
+Modules in eval mode: 216                                                       
+Total FLOPs: 0                                                                  
+SLURM auto-requeueing enabled. Setting signal handlers.
+`Trainer.fit` stopped: `max_epochs=400` reached.
+Epoch 399/399 ━━━━━━━━━━━━━━━━━ 152/152 0:00:06 • 0:00:00 25.97it/s v_num: 2.000
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+SLURM auto-requeueing enabled. Setting signal handlers.
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│       eval_accuracy       │    0.6625766754150391     │
+│          eval_f1          │    0.7263681888580322     │
+│         eval_mse          │    0.08983934670686722    │
+│       eval_pearson        │    0.3270972967147827     │
+│      eval_precision       │    0.7227723002433777     │
+│        eval_recall        │    0.7300000190734863     │
+│       eval_spearman       │    0.34603092074394226    │
+│        train_loss         │    0.08983934670686722    │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 41/41 0:00:00 • 0:00:00 70.90it/s 
+Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]Loading weights: 100%|██████████| 391/391 [00:00<00:00, 15768.21it/s]
+[1mBertModel LOAD REPORT[0m from: intfloat/e5-large-v2
+Key                     | Status     |  | 
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+Loading `train_dataloader` to estimate number of stepping batches.
+┏━━━┳━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┳━━━━━━━┓
+┃   ┃ Name      ┃ Type                ┃ Params ┃ Mode  ┃ FLOPs ┃
+┡━━━╇━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━╇━━━━━━━┩
+│ 0 │ model     │ SentenceTransformer │  335 M │ train │     0 │
+│ 1 │ f1_score  │ BinaryF1Score       │      0 │ train │     0 │
+│ 2 │ spearman  │ SpearmanCorrCoef    │      0 │ train │     0 │
+│ 3 │ pearson   │ PearsonCorrCoef     │      0 │ train │     0 │
+│ 4 │ precision │ BinaryPrecision     │      0 │ train │     0 │
+│ 5 │ recall    │ BinaryRecall        │      0 │ train │     0 │
+│ 6 │ mse       │ MeanSquaredError    │      0 │ train │     0 │
+│ 7 │ accuracy  │ BinaryAccuracy      │      0 │ train │     0 │
+└───┴───────────┴─────────────────────┴────────┴───────┴───────┘
+Trainable params: 335 M                                                         
+Non-trainable params: 0                                                         
+Total params: 335 M                                                             
+Total estimated model params size (MB): 1.3 K                                   
+Modules in train mode: 11                                                       
+Modules in eval mode: 444                                                       
+Total FLOPs: 0                                                                  
+SLURM auto-requeueing enabled. Setting signal handlers.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/loops/fit_loop.py:534: Found 444 module(s) in eval mode at the start of training. This may lead to unexpected behavior during training. If this is intentional, you can ignore this warning.
+`Trainer.fit` stopped: `max_epochs=100` reached.
+Epoch 99/99 ━━━━━━━━━━━━━━━━━━━ 152/152 0:00:10 • 0:00:00 14.98it/s v_num: 1.000
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+SLURM auto-requeueing enabled. Setting signal handlers.
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│       eval_accuracy       │    0.6472392678260803     │
+│          eval_f1          │    0.7174447178840637     │
+│         eval_mse          │    0.09149713814258575    │
+│       eval_pearson        │    0.26854753494262695    │
+│      eval_precision       │    0.7053139805793762     │
+│        eval_recall        │    0.7300000190734863     │
+│       eval_spearman       │    0.2655162215232849     │
+│        train_loss         │    0.09149713814258575    │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 41/41 0:00:00 • 0:00:00 51.09it/s 
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 11664.52it/s]
+[1mMPNetModel LOAD REPORT[0m from: sentence-transformers/multi-qa-mpnet-base-dot-v1
+Key                     | Status     |  | 
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/torchmetrics/utilities/prints.py:43: UserWarning: Metric `SpearmanCorrcoef` will save all targets and predictions in the buffer. For large datasets, this may lead to large memory footprint.
+  warnings.warn(*args, **kwargs)
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+Initializing distributed: GLOBAL_RANK: 0, MEMBER: 1/1
+----------------------------------------------------------------------------------------------------
+distributed_backend=nccl
+All distributed processes registered. Starting with 1 processes
+----------------------------------------------------------------------------------------------------
+
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+Loading `train_dataloader` to estimate number of stepping batches.
+┏━━━┳━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┳━━━━━━━┓
+┃   ┃ Name      ┃ Type                ┃ Params ┃ Mode  ┃ FLOPs ┃
+┡━━━╇━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━╇━━━━━━━┩
+│ 0 │ model     │ SentenceTransformer │  109 M │ train │     0 │
+│ 1 │ mlp       │ EmpathyMLP          │  369 K │ train │     0 │
+│ 2 │ f1_score  │ BinaryF1Score       │      0 │ train │     0 │
+│ 3 │ spearman  │ SpearmanCorrCoef    │      0 │ train │     0 │
+│ 4 │ pearson   │ PearsonCorrCoef     │      0 │ train │     0 │
+│ 5 │ precision │ BinaryPrecision     │      0 │ train │     0 │
+│ 6 │ recall    │ BinaryRecall        │      0 │ train │     0 │
+│ 7 │ mse       │ MeanSquaredError    │      0 │ train │     0 │
+│ 8 │ accuracy  │ BinaryAccuracy      │      0 │ train │     0 │
+└───┴───────────┴─────────────────────┴────────┴───────┴───────┘
+Trainable params: 109 M                                                         
+Non-trainable params: 0                                                         
+Total params: 109 M                                                             
+Total estimated model params size (MB): 439                                     
+Modules in train mode: 18                                                       
+Modules in eval mode: 216                                                       
+Total FLOPs: 0                                                                  
+SLURM auto-requeueing enabled. Setting signal handlers.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('val_loss', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/loops/fit_loop.py:534: Found 216 module(s) in eval mode at the start of training. This may lead to unexpected behavior during training. If this is intentional, you can ignore this warning.
+`Trainer.fit` stopped: `max_epochs=400` reached.
+Epoch 399/399 ━━━━━━━━━━━━━━━━━ 152/152 0:00:04 • 0:00:00 40.43it/s v_num: 1.000
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+SLURM auto-requeueing enabled. Setting signal handlers.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:217: Using `DistributedSampler` with the dataloaders. During `trainer.test()`, it is recommended to use `Trainer(devices=1, num_nodes=1)` to ensure each sample/batch gets evaluated exactly once. Otherwise, multi-device settings use `DistributedSampler` that replicates some samples to make sure all devices have same batch size in case of uneven inputs.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('eval_loss', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│       eval_accuracy       │     0.592024564743042     │
+│          eval_f1          │    0.6855791807174683     │
+│         eval_loss         │    0.08554034680128098    │
+│         eval_mse          │    0.08554034680128098    │
+│       eval_pearson        │    0.14934593439102173    │
+│      eval_precision       │    0.6502242088317871     │
+│        eval_recall        │    0.7250000238418579     │
+│       eval_spearman       │    0.14651431143283844    │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 41/41 0:00:00 • 0:00:00 114.63it/s 
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 14602.28it/s]
+[1mMPNetModel LOAD REPORT[0m from: sentence-transformers/multi-qa-mpnet-base-dot-v1
+Key                     | Status     |  | 
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/torchmetrics/utilities/prints.py:43: UserWarning: Metric `SpearmanCorrcoef` will save all targets and predictions in the buffer. For large datasets, this may lead to large memory footprint.
+  warnings.warn(*args, **kwargs)
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+Initializing distributed: GLOBAL_RANK: 0, MEMBER: 1/1
+----------------------------------------------------------------------------------------------------
+distributed_backend=nccl
+All distributed processes registered. Starting with 1 processes
+----------------------------------------------------------------------------------------------------
+
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+Loading `train_dataloader` to estimate number of stepping batches.
+┏━━━┳━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┳━━━━━━━┓
+┃   ┃ Name      ┃ Type                ┃ Params ┃ Mode  ┃ FLOPs ┃
+┡━━━╇━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━╇━━━━━━━┩
+│ 0 │ model     │ SentenceTransformer │  109 M │ train │     0 │
+│ 1 │ mlp       │ EmpathyMLP          │  1.5 M │ train │     0 │
+│ 2 │ f1_score  │ BinaryF1Score       │      0 │ train │     0 │
+│ 3 │ spearman  │ SpearmanCorrCoef    │      0 │ train │     0 │
+│ 4 │ pearson   │ PearsonCorrCoef     │      0 │ train │     0 │
+│ 5 │ precision │ BinaryPrecision     │      0 │ train │     0 │
+│ 6 │ recall    │ BinaryRecall        │      0 │ train │     0 │
+│ 7 │ mse       │ MeanSquaredError    │      0 │ train │     0 │
+│ 8 │ accuracy  │ BinaryAccuracy      │      0 │ train │     0 │
+└───┴───────────┴─────────────────────┴────────┴───────┴───────┘
+Trainable params: 111 M                                                         
+Non-trainable params: 0                                                         
+Total params: 111 M                                                             
+Total estimated model params size (MB): 444                                     
+Modules in train mode: 20                                                       
+Modules in eval mode: 216                                                       
+Total FLOPs: 0                                                                  
+SLURM auto-requeueing enabled. Setting signal handlers.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('val_loss', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/loops/fit_loop.py:534: Found 216 module(s) in eval mode at the start of training. This may lead to unexpected behavior during training. If this is intentional, you can ignore this warning.
+`Trainer.fit` stopped: `max_epochs=100` reached.
+Epoch 99/99 ━━━━━━━━━━━━━━━━━━━ 152/152 0:00:06 • 0:00:00 23.39it/s v_num: 1.000
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+SLURM auto-requeueing enabled. Setting signal handlers.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:217: Using `DistributedSampler` with the dataloaders. During `trainer.test()`, it is recommended to use `Trainer(devices=1, num_nodes=1)` to ensure each sample/batch gets evaluated exactly once. Otherwise, multi-device settings use `DistributedSampler` that replicates some samples to make sure all devices have same batch size in case of uneven inputs.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('eval_loss', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│       eval_accuracy       │    0.6717791557312012     │
+│          eval_f1          │    0.7344912886619568     │
+│         eval_loss         │    0.07617943733930588    │
+│         eval_mse          │    0.07617943733930588    │
+│       eval_pearson        │    0.4059770703315735     │
+│      eval_precision       │    0.7290640473365784     │
+│        eval_recall        │    0.7400000095367432     │
+│       eval_spearman       │    0.41220787167549133    │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 41/41 0:00:00 • 0:00:00 62.45it/s 
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 12455.48it/s]
+[1mMPNetModel LOAD REPORT[0m from: sentence-transformers/multi-qa-mpnet-base-dot-v1
+Key                     | Status     |  | 
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/torchmetrics/utilities/prints.py:43: UserWarning: Metric `SpearmanCorrcoef` will save all targets and predictions in the buffer. For large datasets, this may lead to large memory footprint.
+  warnings.warn(*args, **kwargs)
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+Initializing distributed: GLOBAL_RANK: 0, MEMBER: 1/1
+----------------------------------------------------------------------------------------------------
+distributed_backend=nccl
+All distributed processes registered. Starting with 1 processes
+----------------------------------------------------------------------------------------------------
+
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+Loading `train_dataloader` to estimate number of stepping batches.
+┏━━━┳━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┳━━━━━━━┓
+┃   ┃ Name      ┃ Type                ┃ Params ┃ Mode  ┃ FLOPs ┃
+┡━━━╇━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━╇━━━━━━━┩
+│ 0 │ model     │ SentenceTransformer │  109 M │ train │     0 │
+│ 1 │ mlp       │ EmpathyMLP          │  1.5 M │ train │     0 │
+│ 2 │ f1_score  │ BinaryF1Score       │      0 │ train │     0 │
+│ 3 │ spearman  │ SpearmanCorrCoef    │      0 │ train │     0 │
+│ 4 │ pearson   │ PearsonCorrCoef     │      0 │ train │     0 │
+│ 5 │ precision │ BinaryPrecision     │      0 │ train │     0 │
+│ 6 │ recall    │ BinaryRecall        │      0 │ train │     0 │
+│ 7 │ mse       │ MeanSquaredError    │      0 │ train │     0 │
+│ 8 │ accuracy  │ BinaryAccuracy      │      0 │ train │     0 │
+└───┴───────────┴─────────────────────┴────────┴───────┴───────┘
+Trainable params: 111 M                                                         
+Non-trainable params: 0                                                         
+Total params: 111 M                                                             
+Total estimated model params size (MB): 444                                     
+Modules in train mode: 20                                                       
+Modules in eval mode: 216                                                       
+Total FLOPs: 0                                                                  
+SLURM auto-requeueing enabled. Setting signal handlers.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('val_loss', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/loops/fit_loop.py:534: Found 216 module(s) in eval mode at the start of training. This may lead to unexpected behavior during training. If this is intentional, you can ignore this warning.
+`Trainer.fit` stopped: `max_epochs=100` reached.
+Epoch 99/99 ━━━━━━━━━━━━━━━━━━━ 246/246 0:00:14 • 0:00:00 17.62it/s v_num: 1.000
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+SLURM auto-requeueing enabled. Setting signal handlers.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:217: Using `DistributedSampler` with the dataloaders. During `trainer.test()`, it is recommended to use `Trainer(devices=1, num_nodes=1)` to ensure each sample/batch gets evaluated exactly once. Otherwise, multi-device settings use `DistributedSampler` that replicates some samples to make sure all devices have same batch size in case of uneven inputs.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('eval_loss', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│       eval_accuracy       │    0.7186312079429626     │
+│          eval_f1          │    0.8037135004997253     │
+│         eval_loss         │    0.06671013683080673    │
+│         eval_mse          │    0.06671013683080673    │
+│       eval_pearson        │    0.35393235087394714    │
+│      eval_precision       │    0.8058510422706604     │
+│        eval_recall        │    0.8015872836112976     │
+│       eval_spearman       │    0.3334619104862213     │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 66/66 0:00:01 • 0:00:00 55.23it/s 
+Running all models with pooling mechanism: MEAN
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 15645.99it/s]
+[1mMPNetModel LOAD REPORT[0m from: sentence-transformers/multi-qa-mpnet-base-dot-v1
+Key                     | Status     |  | 
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/torchmetrics/utilities/prints.py:43: UserWarning: Metric `SpearmanCorrcoef` will save all targets and predictions in the buffer. For large datasets, this may lead to large memory footprint.
+  warnings.warn(*args, **kwargs)
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+Initializing distributed: GLOBAL_RANK: 0, MEMBER: 1/1
+----------------------------------------------------------------------------------------------------
+distributed_backend=nccl
+All distributed processes registered. Starting with 1 processes
+----------------------------------------------------------------------------------------------------
+
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+Loading `train_dataloader` to estimate number of stepping batches.
+┏━━━┳━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┳━━━━━━━┓
+┃   ┃ Name      ┃ Type                ┃ Params ┃ Mode  ┃ FLOPs ┃
+┡━━━╇━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━╇━━━━━━━┩
+│ 0 │ model     │ SentenceTransformer │  109 M │ train │     0 │
+│ 1 │ mlp       │ EmpathyMLP          │  1.5 M │ train │     0 │
+│ 2 │ f1_score  │ BinaryF1Score       │      0 │ train │     0 │
+│ 3 │ spearman  │ SpearmanCorrCoef    │      0 │ train │     0 │
+│ 4 │ pearson   │ PearsonCorrCoef     │      0 │ train │     0 │
+│ 5 │ precision │ BinaryPrecision     │      0 │ train │     0 │
+│ 6 │ recall    │ BinaryRecall        │      0 │ train │     0 │
+│ 7 │ mse       │ MeanSquaredError    │      0 │ train │     0 │
+│ 8 │ accuracy  │ BinaryAccuracy      │      0 │ train │     0 │
+└───┴───────────┴─────────────────────┴────────┴───────┴───────┘
+Trainable params: 111 M                                                         
+Non-trainable params: 0                                                         
+Total params: 111 M                                                             
+Total estimated model params size (MB): 444                                     
+Modules in train mode: 20                                                       
+Modules in eval mode: 216                                                       
+Total FLOPs: 0                                                                  
+SLURM auto-requeueing enabled. Setting signal handlers.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('val_loss', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/loops/fit_loop.py:534: Found 216 module(s) in eval mode at the start of training. This may lead to unexpected behavior during training. If this is intentional, you can ignore this warning.
+`Trainer.fit` stopped: `max_epochs=100` reached.
+Epoch 99/99 ━━━━━━━━━━━━━━━━━━━ 152/152 0:00:06 • 0:00:00 26.10it/s v_num: 1.000
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+SLURM auto-requeueing enabled. Setting signal handlers.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:217: Using `DistributedSampler` with the dataloaders. During `trainer.test()`, it is recommended to use `Trainer(devices=1, num_nodes=1)` to ensure each sample/batch gets evaluated exactly once. Otherwise, multi-device settings use `DistributedSampler` that replicates some samples to make sure all devices have same batch size in case of uneven inputs.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('eval_loss', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│       eval_accuracy       │    0.6625766754150391     │
+│          eval_f1          │    0.7317073345184326     │
+│         eval_loss         │    0.08011147379875183    │
+│         eval_mse          │    0.08011147379875183    │
+│       eval_pearson        │    0.39165234565734863    │
+│      eval_precision       │    0.7142857313156128     │
+│        eval_recall        │           0.75            │
+│       eval_spearman       │    0.40985605120658875    │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 41/41 0:00:00 • 0:00:00 70.60it/s 
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 16263.33it/s]
+[1mMPNetModel LOAD REPORT[0m from: sentence-transformers/multi-qa-mpnet-base-dot-v1
+Key                     | Status     |  | 
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+Loading `train_dataloader` to estimate number of stepping batches.
+┏━━━┳━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┳━━━━━━━┓
+┃   ┃ Name      ┃ Type                ┃ Params ┃ Mode  ┃ FLOPs ┃
+┡━━━╇━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━╇━━━━━━━┩
+│ 0 │ model     │ SentenceTransformer │  109 M │ train │     0 │
+│ 1 │ mlp       │ EmpathyMLP          │  1.5 M │ train │     0 │
+│ 2 │ f1_score  │ BinaryF1Score       │      0 │ train │     0 │
+│ 3 │ spearman  │ SpearmanCorrCoef    │      0 │ train │     0 │
+│ 4 │ pearson   │ PearsonCorrCoef     │      0 │ train │     0 │
+│ 5 │ precision │ BinaryPrecision     │      0 │ train │     0 │
+│ 6 │ recall    │ BinaryRecall        │      0 │ train │     0 │
+│ 7 │ mse       │ MeanSquaredError    │      0 │ train │     0 │
+│ 8 │ accuracy  │ BinaryAccuracy      │      0 │ train │     0 │
+└───┴───────────┴─────────────────────┴────────┴───────┴───────┘
+Trainable params: 111 M                                                         
+Non-trainable params: 0                                                         
+Total params: 111 M                                                             
+Total estimated model params size (MB): 444                                     
+Modules in train mode: 20                                                       
+Modules in eval mode: 216                                                       
+Total FLOPs: 0                                                                  
+SLURM auto-requeueing enabled. Setting signal handlers.
+`Trainer.fit` stopped: `max_epochs=400` reached.
+Epoch 399/399 ━━━━━━━━━━━━━━━━━ 152/152 0:00:06 • 0:00:00 25.64it/s v_num: 1.000
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+SLURM auto-requeueing enabled. Setting signal handlers.
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│       eval_accuracy       │    0.6625766754150391     │
+│          eval_f1          │    0.7236180901527405     │
+│         eval_loss         │    0.08772336691617966    │
+│         eval_mse          │    0.08772336691617966    │
+│       eval_pearson        │    0.39010944962501526    │
+│      eval_precision       │    0.7272727489471436     │
+│        eval_recall        │    0.7200000286102295     │
+│       eval_spearman       │    0.3961646258831024     │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 41/41 0:00:00 • 0:00:00 69.93it/s 
+Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]Loading weights: 100%|██████████| 391/391 [00:00<00:00, 10539.54it/s]
+[1mBertModel LOAD REPORT[0m from: intfloat/e5-large-v2
+Key                     | Status     |  | 
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+Loading `train_dataloader` to estimate number of stepping batches.
+┏━━━┳━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┳━━━━━━━┓
+┃   ┃ Name      ┃ Type                ┃ Params ┃ Mode  ┃ FLOPs ┃
+┡━━━╇━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━╇━━━━━━━┩
+│ 0 │ model     │ SentenceTransformer │  335 M │ train │     0 │
+│ 1 │ mlp       │ EmpathyMLP          │  2.7 M │ train │     0 │
+│ 2 │ f1_score  │ BinaryF1Score       │      0 │ train │     0 │
+│ 3 │ spearman  │ SpearmanCorrCoef    │      0 │ train │     0 │
+│ 4 │ pearson   │ PearsonCorrCoef     │      0 │ train │     0 │
+│ 5 │ precision │ BinaryPrecision     │      0 │ train │     0 │
+│ 6 │ recall    │ BinaryRecall        │      0 │ train │     0 │
+│ 7 │ mse       │ MeanSquaredError    │      0 │ train │     0 │
+│ 8 │ accuracy  │ BinaryAccuracy      │      0 │ train │     0 │
+└───┴───────────┴─────────────────────┴────────┴───────┴───────┘
+Trainable params: 337 M                                                         
+Non-trainable params: 0                                                         
+Total params: 337 M                                                             
+Total estimated model params size (MB): 1.4 K                                   
+Modules in train mode: 21                                                       
+Modules in eval mode: 444                                                       
+Total FLOPs: 0                                                                  
+SLURM auto-requeueing enabled. Setting signal handlers.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/loops/fit_loop.py:534: Found 444 module(s) in eval mode at the start of training. This may lead to unexpected behavior during training. If this is intentional, you can ignore this warning.
+`Trainer.fit` stopped: `max_epochs=100` reached.
+Epoch 99/99 ━━━━━━━━━━━━━━━━━━━ 152/152 0:00:10 • 0:00:00 14.77it/s v_num: 1.000
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+SLURM auto-requeueing enabled. Setting signal handlers.
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│       eval_accuracy       │     0.699386477470398     │
+│          eval_f1          │     0.762135922908783     │
+│         eval_loss         │    0.07412959635257721    │
+│         eval_mse          │    0.07412959635257721    │
+│       eval_pearson        │    0.40311554074287415    │
+│      eval_precision       │    0.7405660152435303     │
+│        eval_recall        │    0.7850000262260437     │
+│       eval_spearman       │    0.41414976119995117    │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 41/41 0:00:00 • 0:00:00 50.35it/s 
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 10365.95it/s]
+[1mMPNetModel LOAD REPORT[0m from: sentence-transformers/multi-qa-mpnet-base-dot-v1
+Key                     | Status     |  | 
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/torchmetrics/utilities/prints.py:43: UserWarning: Metric `SpearmanCorrcoef` will save all targets and predictions in the buffer. For large datasets, this may lead to large memory footprint.
+  warnings.warn(*args, **kwargs)
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+Initializing distributed: GLOBAL_RANK: 0, MEMBER: 1/1
+----------------------------------------------------------------------------------------------------
+distributed_backend=nccl
+All distributed processes registered. Starting with 1 processes
+----------------------------------------------------------------------------------------------------
+
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+Loading `train_dataloader` to estimate number of stepping batches.
+┏━━━┳━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┳━━━━━━━┓
+┃   ┃ Name      ┃ Type                ┃ Params ┃ Mode  ┃ FLOPs ┃
+┡━━━╇━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━╇━━━━━━━┩
+│ 0 │ model     │ SentenceTransformer │  109 M │ train │     0 │
+│ 1 │ f1_score  │ BinaryF1Score       │      0 │ train │     0 │
+│ 2 │ spearman  │ SpearmanCorrCoef    │      0 │ train │     0 │
+│ 3 │ pearson   │ PearsonCorrCoef     │      0 │ train │     0 │
+│ 4 │ precision │ BinaryPrecision     │      0 │ train │     0 │
+│ 5 │ recall    │ BinaryRecall        │      0 │ train │     0 │
+│ 6 │ mse       │ MeanSquaredError    │      0 │ train │     0 │
+│ 7 │ accuracy  │ BinaryAccuracy      │      0 │ train │     0 │
+└───┴───────────┴─────────────────────┴────────┴───────┴───────┘
+Trainable params: 109 M                                                         
+Non-trainable params: 0                                                         
+Total params: 109 M                                                             
+Total estimated model params size (MB): 437                                     
+Modules in train mode: 10                                                       
+Modules in eval mode: 216                                                       
+Total FLOPs: 0                                                                  
+SLURM auto-requeueing enabled. Setting signal handlers.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('train_loss', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/loops/fit_loop.py:534: Found 216 module(s) in eval mode at the start of training. This may lead to unexpected behavior during training. If this is intentional, you can ignore this warning.
+`Trainer.fit` stopped: `max_epochs=50` reached.
+Epoch 49/49 ━━━━━━━━━━━━━━━━━━━ 152/152 0:00:06 • 0:00:00 25.98it/s v_num: 1.000
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+SLURM auto-requeueing enabled. Setting signal handlers.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:217: Using `DistributedSampler` with the dataloaders. During `trainer.test()`, it is recommended to use `Trainer(devices=1, num_nodes=1)` to ensure each sample/batch gets evaluated exactly once. Otherwise, multi-device settings use `DistributedSampler` that replicates some samples to make sure all devices have same batch size in case of uneven inputs.
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│       eval_accuracy       │    0.6196318864822388     │
+│          eval_f1          │    0.6990291476249695     │
+│         eval_mse          │    0.0830010399222374     │
+│       eval_pearson        │    0.23884448409080505    │
+│      eval_precision       │    0.6792452931404114     │
+│        eval_recall        │    0.7200000286102295     │
+│       eval_spearman       │    0.25199511647224426    │
+│        train_loss         │    0.0830010399222374     │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 41/41 0:00:00 • 0:00:00 72.56it/s 
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 13261.09it/s]
+[1mMPNetModel LOAD REPORT[0m from: sentence-transformers/multi-qa-mpnet-base-dot-v1
+Key                     | Status     |  | 
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+Loading `train_dataloader` to estimate number of stepping batches.
+┏━━━┳━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┳━━━━━━━┓
+┃   ┃ Name      ┃ Type                ┃ Params ┃ Mode  ┃ FLOPs ┃
+┡━━━╇━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━╇━━━━━━━┩
+│ 0 │ model     │ SentenceTransformer │  109 M │ train │     0 │
+│ 1 │ f1_score  │ BinaryF1Score       │      0 │ train │     0 │
+│ 2 │ spearman  │ SpearmanCorrCoef    │      0 │ train │     0 │
+│ 3 │ pearson   │ PearsonCorrCoef     │      0 │ train │     0 │
+│ 4 │ precision │ BinaryPrecision     │      0 │ train │     0 │
+│ 5 │ recall    │ BinaryRecall        │      0 │ train │     0 │
+│ 6 │ mse       │ MeanSquaredError    │      0 │ train │     0 │
+│ 7 │ accuracy  │ BinaryAccuracy      │      0 │ train │     0 │
+└───┴───────────┴─────────────────────┴────────┴───────┴───────┘
+Trainable params: 109 M                                                         
+Non-trainable params: 0                                                         
+Total params: 109 M                                                             
+Total estimated model params size (MB): 437                                     
+Modules in train mode: 10                                                       
+Modules in eval mode: 216                                                       
+Total FLOPs: 0                                                                  
+SLURM auto-requeueing enabled. Setting signal handlers.
+`Trainer.fit` stopped: `max_epochs=100` reached.
+Epoch 99/99 ━━━━━━━━━━━━━━━━━━━ 152/152 0:00:06 • 0:00:00 26.55it/s v_num: 1.000
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+SLURM auto-requeueing enabled. Setting signal handlers.
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│       eval_accuracy       │    0.6748466491699219     │
+│          eval_f1          │    0.7401960492134094     │
+│         eval_mse          │    0.0789920911192894     │
+│       eval_pearson        │    0.3559739291667938     │
+│      eval_precision       │    0.7259615659713745     │
+│        eval_recall        │    0.7549999952316284     │
+│       eval_spearman       │    0.37069451808929443    │
+│        train_loss         │    0.0789920911192894     │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 41/41 0:00:00 • 0:00:00 73.50it/s 
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 10575.04it/s]
+[1mMPNetModel LOAD REPORT[0m from: sentence-transformers/multi-qa-mpnet-base-dot-v1
+Key                     | Status     |  | 
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+Loading `train_dataloader` to estimate number of stepping batches.
+┏━━━┳━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┳━━━━━━━┓
+┃   ┃ Name      ┃ Type                ┃ Params ┃ Mode  ┃ FLOPs ┃
+┡━━━╇━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━╇━━━━━━━┩
+│ 0 │ model     │ SentenceTransformer │  109 M │ train │     0 │
+│ 1 │ f1_score  │ BinaryF1Score       │      0 │ train │     0 │
+│ 2 │ spearman  │ SpearmanCorrCoef    │      0 │ train │     0 │
+│ 3 │ pearson   │ PearsonCorrCoef     │      0 │ train │     0 │
+│ 4 │ precision │ BinaryPrecision     │      0 │ train │     0 │
+│ 5 │ recall    │ BinaryRecall        │      0 │ train │     0 │
+│ 6 │ mse       │ MeanSquaredError    │      0 │ train │     0 │
+│ 7 │ accuracy  │ BinaryAccuracy      │      0 │ train │     0 │
+└───┴───────────┴─────────────────────┴────────┴───────┴───────┘
+Trainable params: 109 M                                                         
+Non-trainable params: 0                                                         
+Total params: 109 M                                                             
+Total estimated model params size (MB): 437                                     
+Modules in train mode: 10                                                       
+Modules in eval mode: 216                                                       
+Total FLOPs: 0                                                                  
+SLURM auto-requeueing enabled. Setting signal handlers.
+`Trainer.fit` stopped: `max_epochs=400` reached.
+Epoch 399/399 ━━━━━━━━━━━━━━━━━ 152/152 0:00:06 • 0:00:00 26.04it/s v_num: 1.000
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+SLURM auto-requeueing enabled. Setting signal handlers.
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│       eval_accuracy       │    0.6625766754150391     │
+│          eval_f1          │    0.7263681888580322     │
+│         eval_mse          │    0.08983934670686722    │
+│       eval_pearson        │    0.3270972967147827     │
+│      eval_precision       │    0.7227723002433777     │
+│        eval_recall        │    0.7300000190734863     │
+│       eval_spearman       │    0.34603092074394226    │
+│        train_loss         │    0.08983934670686722    │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 41/41 0:00:00 • 0:00:00 70.87it/s 
+Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]Loading weights: 100%|██████████| 391/391 [00:00<00:00, 12787.31it/s]
+[1mBertModel LOAD REPORT[0m from: intfloat/e5-large-v2
+Key                     | Status     |  | 
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+Loading `train_dataloader` to estimate number of stepping batches.
+┏━━━┳━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┳━━━━━━━┓
+┃   ┃ Name      ┃ Type                ┃ Params ┃ Mode  ┃ FLOPs ┃
+┡━━━╇━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━╇━━━━━━━┩
+│ 0 │ model     │ SentenceTransformer │  335 M │ train │     0 │
+│ 1 │ f1_score  │ BinaryF1Score       │      0 │ train │     0 │
+│ 2 │ spearman  │ SpearmanCorrCoef    │      0 │ train │     0 │
+│ 3 │ pearson   │ PearsonCorrCoef     │      0 │ train │     0 │
+│ 4 │ precision │ BinaryPrecision     │      0 │ train │     0 │
+│ 5 │ recall    │ BinaryRecall        │      0 │ train │     0 │
+│ 6 │ mse       │ MeanSquaredError    │      0 │ train │     0 │
+│ 7 │ accuracy  │ BinaryAccuracy      │      0 │ train │     0 │
+└───┴───────────┴─────────────────────┴────────┴───────┴───────┘
+Trainable params: 335 M                                                         
+Non-trainable params: 0                                                         
+Total params: 335 M                                                             
+Total estimated model params size (MB): 1.3 K                                   
+Modules in train mode: 11                                                       
+Modules in eval mode: 444                                                       
+Total FLOPs: 0                                                                  
+SLURM auto-requeueing enabled. Setting signal handlers.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/loops/fit_loop.py:534: Found 444 module(s) in eval mode at the start of training. This may lead to unexpected behavior during training. If this is intentional, you can ignore this warning.
+`Trainer.fit` stopped: `max_epochs=100` reached.
+Epoch 99/99 ━━━━━━━━━━━━━━━━━━━ 152/152 0:00:10 • 0:00:00 14.90it/s v_num: 1.000
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+SLURM auto-requeueing enabled. Setting signal handlers.
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│       eval_accuracy       │     0.650306761264801     │
+│          eval_f1          │     0.710659921169281     │
+│         eval_mse          │    0.09690526872873306    │
+│       eval_pearson        │    0.23414386808872223    │
+│      eval_precision       │    0.7216494679450989     │
+│        eval_recall        │     0.699999988079071     │
+│       eval_spearman       │    0.2512827515602112     │
+│        train_loss         │    0.09690526872873306    │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 41/41 0:00:00 • 0:00:00 49.84it/s 
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 8362.13it/s]
+[1mMPNetModel LOAD REPORT[0m from: sentence-transformers/multi-qa-mpnet-base-dot-v1
+Key                     | Status     |  | 
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/torchmetrics/utilities/prints.py:43: UserWarning: Metric `SpearmanCorrcoef` will save all targets and predictions in the buffer. For large datasets, this may lead to large memory footprint.
+  warnings.warn(*args, **kwargs)
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+Initializing distributed: GLOBAL_RANK: 0, MEMBER: 1/1
+----------------------------------------------------------------------------------------------------
+distributed_backend=nccl
+All distributed processes registered. Starting with 1 processes
+----------------------------------------------------------------------------------------------------
+
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+Loading `train_dataloader` to estimate number of stepping batches.
+┏━━━┳━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┳━━━━━━━┓
+┃   ┃ Name      ┃ Type                ┃ Params ┃ Mode  ┃ FLOPs ┃
+┡━━━╇━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━╇━━━━━━━┩
+│ 0 │ model     │ SentenceTransformer │  109 M │ train │     0 │
+│ 1 │ mlp       │ EmpathyMLP          │  369 K │ train │     0 │
+│ 2 │ f1_score  │ BinaryF1Score       │      0 │ train │     0 │
+│ 3 │ spearman  │ SpearmanCorrCoef    │      0 │ train │     0 │
+│ 4 │ pearson   │ PearsonCorrCoef     │      0 │ train │     0 │
+│ 5 │ precision │ BinaryPrecision     │      0 │ train │     0 │
+│ 6 │ recall    │ BinaryRecall        │      0 │ train │     0 │
+│ 7 │ mse       │ MeanSquaredError    │      0 │ train │     0 │
+│ 8 │ accuracy  │ BinaryAccuracy      │      0 │ train │     0 │
+└───┴───────────┴─────────────────────┴────────┴───────┴───────┘
+Trainable params: 109 M                                                         
+Non-trainable params: 0                                                         
+Total params: 109 M                                                             
+Total estimated model params size (MB): 439                                     
+Modules in train mode: 18                                                       
+Modules in eval mode: 216                                                       
+Total FLOPs: 0                                                                  
+SLURM auto-requeueing enabled. Setting signal handlers.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('val_loss', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/loops/fit_loop.py:534: Found 216 module(s) in eval mode at the start of training. This may lead to unexpected behavior during training. If this is intentional, you can ignore this warning.
+`Trainer.fit` stopped: `max_epochs=400` reached.
+Epoch 399/399 ━━━━━━━━━━━━━━━━━ 152/152 0:00:03 • 0:00:00 43.03it/s v_num: 1.000
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+SLURM auto-requeueing enabled. Setting signal handlers.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:217: Using `DistributedSampler` with the dataloaders. During `trainer.test()`, it is recommended to use `Trainer(devices=1, num_nodes=1)` to ensure each sample/batch gets evaluated exactly once. Otherwise, multi-device settings use `DistributedSampler` that replicates some samples to make sure all devices have same batch size in case of uneven inputs.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('eval_loss', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│       eval_accuracy       │    0.5889570713043213     │
+│          eval_f1          │     0.68544602394104      │
+│         eval_loss         │    0.08598468452692032    │
+│         eval_mse          │    0.08598468452692032    │
+│       eval_pearson        │    0.1418285071849823     │
+│      eval_precision       │    0.6460176706314087     │
+│        eval_recall        │    0.7300000190734863     │
+│       eval_spearman       │    0.13721223175525665    │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 41/41 0:00:00 • 0:00:00 117.86it/s 
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 13849.94it/s]
+[1mMPNetModel LOAD REPORT[0m from: sentence-transformers/multi-qa-mpnet-base-dot-v1
+Key                     | Status     |  | 
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/torchmetrics/utilities/prints.py:43: UserWarning: Metric `SpearmanCorrcoef` will save all targets and predictions in the buffer. For large datasets, this may lead to large memory footprint.
+  warnings.warn(*args, **kwargs)
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+Initializing distributed: GLOBAL_RANK: 0, MEMBER: 1/1
+----------------------------------------------------------------------------------------------------
+distributed_backend=nccl
+All distributed processes registered. Starting with 1 processes
+----------------------------------------------------------------------------------------------------
+
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+Loading `train_dataloader` to estimate number of stepping batches.
+┏━━━┳━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┳━━━━━━━┓
+┃   ┃ Name      ┃ Type                ┃ Params ┃ Mode  ┃ FLOPs ┃
+┡━━━╇━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━╇━━━━━━━┩
+│ 0 │ model     │ SentenceTransformer │  109 M │ train │     0 │
+│ 1 │ mlp       │ EmpathyMLP          │  1.5 M │ train │     0 │
+│ 2 │ f1_score  │ BinaryF1Score       │      0 │ train │     0 │
+│ 3 │ spearman  │ SpearmanCorrCoef    │      0 │ train │     0 │
+│ 4 │ pearson   │ PearsonCorrCoef     │      0 │ train │     0 │
+│ 5 │ precision │ BinaryPrecision     │      0 │ train │     0 │
+│ 6 │ recall    │ BinaryRecall        │      0 │ train │     0 │
+│ 7 │ mse       │ MeanSquaredError    │      0 │ train │     0 │
+│ 8 │ accuracy  │ BinaryAccuracy      │      0 │ train │     0 │
+└───┴───────────┴─────────────────────┴────────┴───────┴───────┘
+Trainable params: 111 M                                                         
+Non-trainable params: 0                                                         
+Total params: 111 M                                                             
+Total estimated model params size (MB): 444                                     
+Modules in train mode: 20                                                       
+Modules in eval mode: 216                                                       
+Total FLOPs: 0                                                                  
+SLURM auto-requeueing enabled. Setting signal handlers.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('val_loss', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/loops/fit_loop.py:534: Found 216 module(s) in eval mode at the start of training. This may lead to unexpected behavior during training. If this is intentional, you can ignore this warning.
+`Trainer.fit` stopped: `max_epochs=100` reached.
+Epoch 99/99 ━━━━━━━━━━━━━━━━━━━ 152/152 0:00:06 • 0:00:00 23.24it/s v_num: 1.000
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+SLURM auto-requeueing enabled. Setting signal handlers.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:217: Using `DistributedSampler` with the dataloaders. During `trainer.test()`, it is recommended to use `Trainer(devices=1, num_nodes=1)` to ensure each sample/batch gets evaluated exactly once. Otherwise, multi-device settings use `DistributedSampler` that replicates some samples to make sure all devices have same batch size in case of uneven inputs.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('eval_loss', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│       eval_accuracy       │    0.6717791557312012     │
+│          eval_f1          │    0.7318295836448669     │
+│         eval_loss         │    0.0771726742386818     │
+│         eval_mse          │    0.0771726742386818     │
+│       eval_pearson        │    0.3937149941921234     │
+│      eval_precision       │     0.733668327331543     │
+│        eval_recall        │    0.7300000190734863     │
+│       eval_spearman       │    0.39765602350234985    │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 41/41 0:00:00 • 0:00:00 61.02it/s 
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 15429.64it/s]
+[1mMPNetModel LOAD REPORT[0m from: sentence-transformers/multi-qa-mpnet-base-dot-v1
+Key                     | Status     |  | 
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/torchmetrics/utilities/prints.py:43: UserWarning: Metric `SpearmanCorrcoef` will save all targets and predictions in the buffer. For large datasets, this may lead to large memory footprint.
+  warnings.warn(*args, **kwargs)
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+Initializing distributed: GLOBAL_RANK: 0, MEMBER: 1/1
+----------------------------------------------------------------------------------------------------
+distributed_backend=nccl
+All distributed processes registered. Starting with 1 processes
+----------------------------------------------------------------------------------------------------
+
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+Loading `train_dataloader` to estimate number of stepping batches.
+┏━━━┳━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┳━━━━━━━┓
+┃   ┃ Name      ┃ Type                ┃ Params ┃ Mode  ┃ FLOPs ┃
+┡━━━╇━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━╇━━━━━━━┩
+│ 0 │ model     │ SentenceTransformer │  109 M │ train │     0 │
+│ 1 │ mlp       │ EmpathyMLP          │  1.5 M │ train │     0 │
+│ 2 │ f1_score  │ BinaryF1Score       │      0 │ train │     0 │
+│ 3 │ spearman  │ SpearmanCorrCoef    │      0 │ train │     0 │
+│ 4 │ pearson   │ PearsonCorrCoef     │      0 │ train │     0 │
+│ 5 │ precision │ BinaryPrecision     │      0 │ train │     0 │
+│ 6 │ recall    │ BinaryRecall        │      0 │ train │     0 │
+│ 7 │ mse       │ MeanSquaredError    │      0 │ train │     0 │
+│ 8 │ accuracy  │ BinaryAccuracy      │      0 │ train │     0 │
+└───┴───────────┴─────────────────────┴────────┴───────┴───────┘
+Trainable params: 111 M                                                         
+Non-trainable params: 0                                                         
+Total params: 111 M                                                             
+Total estimated model params size (MB): 444                                     
+Modules in train mode: 20                                                       
+Modules in eval mode: 216                                                       
+Total FLOPs: 0                                                                  
+SLURM auto-requeueing enabled. Setting signal handlers.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('val_loss', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/loops/fit_loop.py:534: Found 216 module(s) in eval mode at the start of training. This may lead to unexpected behavior during training. If this is intentional, you can ignore this warning.
+`Trainer.fit` stopped: `max_epochs=100` reached.
+Epoch 99/99 ━━━━━━━━━━━━━━━━━━━ 246/246 0:00:13 • 0:00:00 17.89it/s v_num: 1.000
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0,1]
+SLURM auto-requeueing enabled. Setting signal handlers.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/data_connector.py:217: Using `DistributedSampler` with the dataloaders. During `trainer.test()`, it is recommended to use `Trainer(devices=1, num_nodes=1)` to ensure each sample/batch gets evaluated exactly once. Otherwise, multi-device settings use `DistributedSampler` that replicates some samples to make sure all devices have same batch size in case of uneven inputs.
+/scratch/rashadb/EmpathyPrediction_Replication/env/lib/python3.11/site-packages/pytorch_lightning/trainer/connectors/logger_connector/result.py:433: It is recommended to use `self.log('eval_loss', ..., sync_dist=True)` when logging on epoch level in distributed setting to accumulate the metric across devices.
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│       eval_accuracy       │    0.7395437359809875     │
+│          eval_f1          │    0.8204455971717834     │
+│         eval_loss         │    0.06427337229251862    │
+│         eval_mse          │    0.06427337229251862    │
+│       eval_pearson        │    0.3875540494918823     │
+│      eval_precision       │    0.8129870295524597     │
+│        eval_recall        │    0.8280423283576965     │
+│       eval_spearman       │    0.3578546643257141     │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 66/66 0:00:01 • 0:00:00 54.75it/s 
